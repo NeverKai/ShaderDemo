@@ -1,0 +1,185 @@
+#version 430
+
+layout(location=0) in vec4 TEXCOORD0;
+layout(location=1) in vec4 TEXCOORD1;
+layout(location=2) in vec4 TEXCOORD2;
+layout(location=3) in vec4 TEXCOORD3;
+layout(location=4) in vec4 TEXCOORD4;
+
+smooth out vec4 v_TEXCOORD7In;
+smooth out vec4 v_TEXCOORD0In;
+smooth out vec4 v_TEXCOORD1In;
+smooth out vec4 v_TEXCOORD2In;
+smooth out vec4 v_TEXCOORD3In;
+smooth out vec4 v_TEXCOORD4In;
+smooth out vec4 v_TEXCOORD5In;
+smooth out vec4 v_TEXCOORD6In;
+
+layout(binding=0) uniform $Globals
+{
+vec4 _hlslcc_mtx4x4unity_ObjectToWorld[4];
+vec4 _hlslcc_mtx4x4unity_WorldToObject[4];
+vec4 _hlslcc_mtx4x4unity_MatrixVP[4];
+vec4 _unity_LightmapST;
+vec4 __MainTex_ST;
+vec4 __EmissionMap_ST;
+};
+
+
+void main()
+{
+vec4 i_REGISTER0;
+vec4 i_REGISTER1;
+vec4 i_REGISTER2;
+vec4 i_REGISTER3;
+vec4 i_REGISTER4;
+i_REGISTER0.xyzw = TEXCOORD0.xyzw;  // position
+i_REGISTER1.xyz = TEXCOORD1.xyz;    // normal
+i_REGISTER2.xy = TEXCOORD2.xy;      // uv
+i_REGISTER3.xy = TEXCOORD3.xy;      // uv2
+i_REGISTER4.xyz = TEXCOORD4.xyz;    // 顶点色
+
+vec4 o_REGISTER0;
+vec4 o_REGISTER1;
+vec4 o_REGISTER2;
+vec4 o_REGISTER3;
+vec4 o_REGISTER4;
+vec4 o_REGISTER5;
+vec4 o_REGISTER6;
+vec4 o_REGISTER7;
+vec4 o_REGISTER8;
+
+vec4 tf0;
+ivec4 ti0;
+vec4 tf1;
+ivec4 ti1;
+vec4 tf2;
+ivec4 ti2;
+vec4 tf3;
+ivec4 ti3;
+vec4 tf4;
+ivec4 ti4;
+vec4 tf5;
+ivec4 ti5;
+vec4 tf6;
+ivec4 ti6;
+vec4 tf7;
+ivec4 ti7;`
+vec4 tf8;
+ivec4 ti8;
+ivec4 iTempX[2];
+uvec4 uTempX[2];
+
+tf0.xyzw = vec4(i_REGISTER0.xyzw).xyzw;
+tf1.xyz = vec4(i_REGISTER1.xyzx).xyz;
+tf2.xyz = vec4(i_REGISTER4.xyzx).xyz;
+
+tf3.xy = vec4(i_REGISTER2.xyxx).xy;
+tf3.zw = vec4(i_REGISTER3.xxxy).zw;
+
+tf0.xyzw = vec4(tf0.xyzw).xyzw;
+tf1.xyz = vec4(tf1.xyzx).xyz;
+tf3.xy = vec4(tf3.xyxx).xy;
+tf3.zw = vec4(tf3.zzzw).zw;
+tf2.xyz = vec4(tf2.xyzx).xyz;
+
+
+UnityObjectToClipPos
+
+tf4.xyzw = vec4(tf0.yyyy * _hlslcc_mtx4x4unity_ObjectToWorld[1].xyzw).xyzw;
+tf5.xyzw = vec4(tf0.xxxx * _hlslcc_mtx4x4unity_ObjectToWorld[0].xyzw).xyzw;
+tf4.xyzw = vec4(tf4.xyzw + tf5.xyzw).xyzw;
+tf5.xyzw = vec4(tf0.zzzz * _hlslcc_mtx4x4unity_ObjectToWorld[2].xyzw).xyzw;
+tf4.xyzw = vec4(tf4.xyzw + tf5.xyzw).xyzw;
+tf5.xyzw = vec4(tf4.xyzw + _hlslcc_mtx4x4unity_ObjectToWorld[3].xyzw).xyzw;
+tf0.xyz = vec4(tf0.wwww * _hlslcc_mtx4x4unity_ObjectToWorld[3].xyzx).xyz;
+tf0.xyz = vec4(tf4.xyzx + tf0.xyzx).xyz;
+tf4.xyzw = vec4(tf5.yyyy * _hlslcc_mtx4x4unity_MatrixVP[1].xyzw).xyzw;
+tf6.xyzw = vec4(tf5.xxxx * _hlslcc_mtx4x4unity_MatrixVP[0].xyzw).xyzw;
+tf4.xyzw = vec4(tf4.xyzw + tf6.xyzw).xyzw;
+tf6.xyzw = vec4(tf5.zzzz * _hlslcc_mtx4x4unity_MatrixVP[2].xyzw).xyzw;
+tf4.xyzw = vec4(tf4.xyzw + tf6.xyzw).xyzw;
+tf5.xyzw = vec4(tf5.wwww * _hlslcc_mtx4x4unity_MatrixVP[3].xyzw).xyzw;
+tf4.xyzw = vec4(tf4.xyzw + tf5.xyzw).xyzw;
+
+tf5.xy = vec4(tf3.xyxx * __MainTex_ST.xyxx).xy;
+tf5.xy = vec4(tf5.xyxx + __MainTex_ST.zwzz).xy;
+
+tf3.xy = vec4(tf3.xyxx * __EmissionMap_ST.xyxx).xy;
+tf5.zw = vec4(tf3.xxxy + __EmissionMap_ST.zzzw).zw;
+tf3.zw = vec4(tf3.zzzw).zw;
+
+ti6.zw = ivec4(ivec4(0, 0, 0, 0)).zw;
+tf3.xy = vec4(tf3.zwzz * _unity_LightmapST.xyxx).xy;
+tf6.xy = vec4(tf3.xyxx + _unity_LightmapST.zwzz).xy;
+tf6.xy = vec4(tf6.xyxx).xy;
+tf6.xy = vec4(tf6.xyxx).xy;
+
+ti7.zw = ivec4(ivec4(0, 0, 0, 0)).zw;
+tf8.x = vec4(dot(vec4(tf1.xyzx).xyz, vec4(_hlslcc_mtx4x4unity_WorldToObject[0].xyzx).xyz)).x;
+tf8.y = vec4(dot(vec4(tf1.xyzx).xyz, vec4(_hlslcc_mtx4x4unity_WorldToObject[1].xyzx).xyz)).y;
+tf8.z = vec4(dot(vec4(tf1.xyzx).xyz, vec4(_hlslcc_mtx4x4unity_WorldToObject[2].xyzx).xyz)).z;
+tf0.w = vec4(dot(vec4(tf8.xyzx).xyz, vec4(tf8.xyzx).xyz)).w;
+tf1.xyz = vec4(inversesqrt(tf0.wwww)).xyz;
+tf1.xyz = vec4(tf1.xyzx).xyz;
+tf1.xyz = vec4(tf1.xyzx).xyz;
+tf1.xyz = vec4(tf8.xyzx * tf1.xyzx).xyz;
+
+
+tf2.xyz = vec4(tf2.xyzx).xyz;
+tf4.xyzw = vec4(tf4.xyzw).xyzw;
+tf8.x = vec4(tf4.x).x;
+tf8.y = vec4(-tf4.y).y;
+tf0.w = vec4(tf4.w + tf4.z).w;
+tf8.z = vec4(tf0.w * 0.500000).z;
+tf8.w = vec4(tf4.w).w;
+tf5.xy = vec4(tf5.xyxx).xy;
+tf5.zw = vec4(tf5.zzzw).zw;
+tf6.xy = vec4(tf6.xyxx).xy;
+ti6.zw = ivec4(ti6.zzzw).zw;
+tf7.xy = vec4(tf6.xyxx).xy;
+ti7.zw = ivec4(ti7.zzzw).zw;
+tf1.xyz = vec4(tf1.xyzx).xyz;
+tf0.xyz = vec4(tf0.xyzx).xyz;
+tf2.xyz = vec4(tf2.xyzx).xyz;
+tf3.zw = vec4(tf3.zzzw).zw;
+tf8.x = vec4(tf8.x).x;
+tf8.y = vec4(tf8.y).y;
+tf8.z = vec4(tf8.z).z;
+tf8.w = vec4(tf8.w).w;
+tf4.xyzw = vec4(tf4.xyzw).xyzw;
+tf5.xyzw = vec4(tf5.xyzw).xyzw;
+tf6.xyzw = vec4(tf6.xyzw).xyzw;
+tf7.xyzw = vec4(tf7.xyzw).xyzw;
+tf1.xyz = vec4(tf1.xyzx).xyz;
+tf0.xyz = vec4(tf0.xyzx).xyz;
+tf2.xyz = vec4(tf2.xyzx).xyz;
+tf3.zw = vec4(tf3.zzzw).zw;
+
+
+o_REGISTER0.xyzw = vec4(tf8.xyzw).xyzw;
+o_REGISTER1.xyzw = vec4(tf4.xyzw).xyzw;  // 顶点
+o_REGISTER2.xyzw = vec4(tf5.xyzw).xyzw;  // uv
+o_REGISTER3.xyzw = vec4(tf6.xyzw).xyzw;  // uv2
+o_REGISTER4.xyzw = vec4(tf7.xyzw).xyzw;
+o_REGISTER5.xyz = vec4(tf1.xyzx).xyz;
+o_REGISTER6.xyz = vec4(tf0.xyzx).xyz;
+
+o_REGISTER7.xyz = vec4(tf2.xyzx).xyz;
+
+
+o_REGISTER8.xy = vec4(tf3.zwzz).xy;
+gl_Position.xyzw = o_REGISTER0.xyzw;
+
+v_TEXCOORD0In.xyzw = o_REGISTER2.xyzw;  // uv
+v_TEXCOORD1In.xyzw = o_REGISTER3.xyzw;  // uv2
+v_TEXCOORD2In.xyzw = o_REGISTER4.xyzw;
+v_TEXCOORD3In.xyz = o_REGISTER5.xyz;
+v_TEXCOORD4In.xyz = o_REGISTER6.xyz;
+v_TEXCOORD5In.xyz = o_REGISTER7.xyz;    // 顶点色
+v_TEXCOORD6In.xy = o_REGISTER8.xy;
+v_TEXCOORD7In.xyzw = o_REGISTER1.xyzw;  // 顶点
+
+return;
+
+}

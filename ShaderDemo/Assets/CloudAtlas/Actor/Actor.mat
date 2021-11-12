@@ -73,7 +73,7 @@ Material:
     - _OcclusionStrength: 1
     - _Parallax: 0.02
     - _SecondShadow: 0.5
-    - _Shininess: 6
+    - _Shininess: 60
     - _SmoothnessTextureChannel: 0
     - _SpecularHighlights: 1
     - _SrcBlend: 1
@@ -82,5 +82,7 @@ Material:
     m_Colors:
     - _Color: {r: 1, g: 1, b: 1, a: 1}
     - _EmissionColor: {r: 0, g: 0, b: 0, a: 1}
+    - _FirstShadowMultColor: {r: 0.39215687, g: 0.39215687, b: 0.39215687, a: 1}
     - _LightColor0: {r: 1, g: 1, b: 1, a: 1}
     - _LightSpecColor: {r: 1, g: 1, b: 1, a: 1}
+    - _SecondShadowMultColor: {r: 1, g: 1, b: 1, a: 1}

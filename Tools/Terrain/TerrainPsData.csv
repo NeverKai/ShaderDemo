@@ -1,0 +1,24 @@
+Name,Value,Type
+__WorldSpaceCameraPos,"-0.75757, 0.60, -0.13976",float3
+__WorldSpaceLightPos0,"0.28424, 0.75502, 0.59089, 0.00",float4
+_unity_OcclusionMaskSelector,"1.00, 0.00, 0.00, 0.00",float4
+_unity_SpecCube0_BoxMax,"0.50, 0.47, 0.50, 1.00",float4
+_unity_SpecCube0_BoxMin,"-0.50, -0.53, -0.50, 1.00",float4
+_unity_SpecCube0_ProbePosition,"0.00, -0.03, 0.00, 0.00",float4
+_unity_SpecCube0_HDR,"2.00, 1.00, 0.00, 0.00",float4
+_unity_SpecCube1_BoxMax,"INF, INF, INF, 1.00",float4
+_unity_SpecCube1_BoxMin,"-INF, -INF, -INF, 1.00",float4
+_unity_SpecCube1_ProbePosition,"0.00, 0.00, 0.00, 0.00",float4
+_unity_SpecCube1_HDR,"1.00, 1.00, 0.00, 0.00",float4
+_unity_Lightmap_HDR,"2.00, 1.00, 0.00, 0.00",float4
+__LightColor0,"0.65094, 0.60393, 0.53734, 1.00",float4
+__Color,"1.00, 1.00, 1.00, 1.00",float4
+__Metallic,"1.00",float
+__Glossiness,"1.00",float
+__SpecularColor,"0.87736, 0.30609, 0.00, 1.00",float4
+__EmissionColor,"0.00, 0.00, 0.00, 1.00",float4
+__EmissionColorA,"0.00, 0.00, 0.00, 1.00",float4
+__EmissionColorB,"0.00, 0.00, 0.00, 1.00",float4
+__EmissionColorC,"0.00, 0.00, 0.00, 1.00",float4
+__EmissiveSwitch,"1.00",float
+__ColorIntensity,"1.00, 1.00, 1.00, 1.00",float4

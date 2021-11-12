@@ -77,30 +77,32 @@
                 float NoL = dot(i.normal, lightWorldNormal);
                 // [0, 1]
                 float halfLambert = NoL * 0.5 + 0.5;
-                //float intensity = NoL > _FirstShadow ? 1.0f : intensity > _SecondShadow  
-                
                 float threshold = (halfLambert + ilmTex.g) * 0.5;
-                //float ramp = saturate()
-                float4 diffuse = lerp(_FirstShadowMultColor, _SecondShadowMultColor, threshold);
+                float ramp = saturate(_FirstShadow - threshold);
+                ramp = smoothstep(0, 0.02, ramp);
+                float4 diffuse = lerp(_FirstShadowMultColor, _SecondShadowMultColor, ramp);
+                diffuse *= col;
 
-                // half3 viewDir = normalize(_WorldSpaceCameraPos.xyz - i.worldPos.xyz);
-                // // 高光
-                // float3 halfDir = normalize(viewDir + _WorldSpaceLightPos0);
-                // float NoH = saturate(dot(i.normal, halfDir));
-                // float intensity = pow(NoH, _Shininess);
-
-                // half3 specular = 0;
-                // // 控制高光区域
-                // half specularMask = ilmTex.b;
-                // if (intensity >= 1 - specularMask)
-				// {
-				// 	specular = (ilmTex.r) * _LightSpecColor * intensity;
-				// }
                 
-                // col.rgb += specular  * _LightColor0.rgb;
+                half3 viewDir = normalize(_WorldSpaceCameraPos.xyz - i.worldPos.xyz);
+                // 高光
+                float3 halfDir = normalize(viewDir + _WorldSpaceLightPos0);
+                float NoH = saturate(dot(i.normal, halfDir));
+                float intensity = pow(NoH, _Shininess);
+
+                half3 specular = 0;
+                // 控制高光区域
+                half specularMask = ilmTex.b;
+                if (intensity >= 1 - specularMask)
+				{
+                    // r 光泽度，越粗糙灰度越小，越光滑灰度越大
+					specular = ilmTex.r * _LightSpecColor * intensity;
+				}
+                
+                col.rgb = (specular + diffuse)  * _LightColor0.rgb;
                 // // apply fog
-                // UNITY_APPLY_FOG(i.fogCoord, col);
-                return diffuse * col;
+                UNITY_APPLY_FOG(i.fogCoord, col);
+                return col;
             }
             ENDCG
         }
