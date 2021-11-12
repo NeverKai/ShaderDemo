@@ -4,14 +4,23 @@
     {
         _MainTex ("Texture", 2D) = "white" {}
         _MaskTex ("Texture", 2D) = "white" {}
-        _FirstShadow ("FirstShadow ID", Float) = 0.8
-        _SecondShadow ("SecondShadow ID", Float) = 0.5
+        _FirstShadow ("FirstShadow ID", Float) = 0.43
+        _SecondShadow ("SecondShadow ID", Float) = 0
         _FirstShadowMultColor ("Light Color", Color) = (1,0,0,1)
         _SecondShadowMultColor ("Light Color", Color) = (0,1,0,1)
+
+        _SpecSmooth ("SecondShadow ID", Float) = 0.314
 
         _Shininess ("SecondShadow ID", Float) = 6
         _LightColor0 ("Light Color", Color) = (1,1,1,1)
         _LightSpecColor ("Light Spec Color", Color) = (1,1,1)
+        _CustomLightDir ("Custom Light Dir", Color) = (0.27641, 0.07001, 0.95849, 1.00)
+        _Color ("Color", Color) = (0.53774, 0.53774, 0.53774, 1.00)
+        _GlobalCharColor ("GlobalCharColor", Color) = (1.00, 1.00, 1.00, 1.00)
+
+        _MainTexInvisible ("MainTexInvisible", Float) = 0.0
+
+
     }
     SubShader
     {
@@ -52,7 +61,7 @@
 
             float3 _LightSpecColor;
 
-            float _FirstShadow, _SecondShadow, _Shininess;
+            float _FirstShadow, _SecondShadow, _Shininess, _SpecSmooth;
 
             v2f vert (appdata v)
             {

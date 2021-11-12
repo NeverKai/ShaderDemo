@@ -197,7 +197,7 @@ tf6.xyz = HalfDir
 // tf2.w = vec4(dot(vec4(tf6.xyzx).xyz, vec4(tf6.xyzx).xyz)).w;
 // tf11.xyz = vec4(inversesqrt(tf2.wwww)).xyz;
 // tf6.xyz = vec4(tf6.xyzx * tf11.xyzx).xyz;
-// tf6 lightDir
+// tf6 HalfDir
 tf6 = normalize(tf6);
 
 // tf0 normalw viewDir
@@ -211,7 +211,7 @@ tf2.w = saturate(dot(normal, viewDir));
 // tf3.w = vec4(max(vec4(tf3.w), vec4(0))).w;
 // tf8.xyz = vec4(min(vec4(tf3.wwww), vec4(vec4(1.00000, 1.00000, 1.00000, 0)))).xyz;
 // NoL
-tf8.x = saturate(dot(normal, lightDir));
+tf8.xyz = saturate(dot(normal, lightDir));
 
 // tf6 HalfDir
 //tf0.x = vec4(dot(vec4(tf0.xyzx).xyz, vec4(tf6.xyzx).xyz)).x;
@@ -219,9 +219,12 @@ tf8.x = saturate(dot(normal, lightDir));
 //tf0.x = vec4(min(vec4(tf0.x), vec4(1.00000))).x;
 tf0.x = saturate(NoH)
 
-tf0.y = vec4(dot(vec4(tf7.xyzx).xyz, vec4(tf6.xyzx).xyz)).y;
-tf0.y = vec4(max(vec4(tf0.y), vec4(0))).y;
-tf0.y = vec4(min(vec4(tf0.y), vec4(1.00000))).y;
+// tf7:lightDir  tf6:HalfDir
+// tf0.y = vec4(dot(vec4(tf7.xyzx).xyz, vec4(tf6.xyzx).xyz)).y;
+// tf0.y = vec4(max(vec4(tf0.y), vec4(0))).y;
+// tf0.y = vec4(min(vec4(tf0.y), vec4(1.00000))).y;
+tf0.y = saturate(LoH)
+
 
 // tf3 ramp 
 tf3.xyz = vec4(tf3.xyzx * __Color.xyzx).xyz;
@@ -454,20 +457,26 @@ tf0.x = vec4(tf0.x * tf0.x).x;
 tf0.x = vec4(tf0.x + 1.00000e-05).x;
 tf0.x = vec4(tf1.x / tf0.x).x;
 
-// tf3 ramp
+
 tf7.xyz = vec4(-tf3.xyzx).xyz;
-// tf3 1 - ramp
+// tf7 = 1 - ramp
 tf7.xyz = vec4(tf7.xyzx + vec4(1.00000, 1.00000, 1.00000, 0)).xyz;
 
-tf0.w = vec4(-tf0.y).w;
-tf0.w = vec4(tf0.w + 1.00000).w;
+//tf0.w = vec4(-tf0.y).w;
+//tf0.w = vec4(tf0.w + 1.00000).w;
+// 1 - LoH
+tf0.w = 1 - tf0.y;
+// tf1.x = vec4(tf0.w * tf0.w).x;
+// tf1.x = vec4(tf1.x * tf1.x).x;
+// tf0.w = vec4(tf0.w * tf1.x).w;
+tf0.w = pow(tf0.w, 5)
 
-tf1.x = vec4(tf0.w * tf0.w).x;
-tf1.x = vec4(tf1.x * tf1.x).x;
-tf0.w = vec4(tf0.w * tf1.x).w;
-
+// (1 - LoH)(1 - ramp) = 1 -ramp - LoH + LoH * ramp
 tf7.xyz = vec4(tf0.wwww * tf7.xyzx).xyz;
+
+// 
 tf3.xyz = vec4(tf3.xyzx + tf7.xyzx).xyz;
+
 tf0.xzw = vec4(tf0.zzzz * tf0.xxxx).xzw;
 tf0.xzw = vec4(tf0.xxzw).xzw;
 
@@ -484,29 +493,28 @@ tf1.x = vec4(tf0.y * tf1.x).x;
 tf0.y = vec4(tf0.y * tf1.x).y;
 tf0.y = vec4(tf0.y + 0.500000).y;
 tf0.y = vec4(tf0.y + -1.00000).y;
-
 // tf1.x = vec4(-tf8.z).x;
 // tf1.x = vec4(tf1.x + 1.00000).x;
+
+//  tf8.z : NoL
 tf1.x = 1 - tf8.z;
-
-tf1.y = vec4(tf1.x * tf1.x).y;
-tf1.y = vec4(tf1.y * tf1.y).y;
-tf1.x = vec4(tf1.y * tf1.x).x;
+//tf1.y = vec4(tf1.x * tf1.x).y;
+//tf1.y = vec4(tf1.y * tf1.y).y;
+//tf1.x = vec4(tf1.y * tf1.x).x;
+tf1.x = pow(tf1.x, 5)
 tf1.x = vec4(tf0.y * tf1.x).x;
-
 tf1.xyw = vec4(tf1.xxxx + vec4(1.00000, 1.00000, 0, 1.00000)).xyw;
-tf1.xyw = vec4(tf1.xyxw).xyw;
-tf1.xyw = vec4(tf1.xyxw).xyw;
 tf1.xyw = vec4(tf4.xyxz * tf1.xyxw).xyw;
+
 tf0.y = vec4(tf1.z * tf0.y).y;
 tf0.y = vec4(tf0.y + 1.00000).y;
 tf1.xyz = vec4(tf0.yyyy * tf1.xywx).xyz;
 
-// 这两步感觉像 (difuss + specular) * lightColor
+// 这两步感觉像 (diffuss + specular) * lightColor
 tf0.xyz = vec4(tf0.xzwx + tf1.xyzx).xyz;
 tf0.xyz = vec4(tf0.xyzx * __LightColor0.xyzx).xyz;
 
-// tf8 = lambert dot(view, normal)
+// tf8 = lambert dot(light, normal)
 tf0.xyz = vec4(tf0.xyzx * tf8.xyzx).xyz;
 
 // tf10  occlusion

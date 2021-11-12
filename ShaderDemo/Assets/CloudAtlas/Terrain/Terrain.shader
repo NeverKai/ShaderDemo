@@ -98,11 +98,15 @@
                 // // F0 + (1.0 - F0) * pow(1.0 - cosTheta, 5.0); 
                 fixed NoV = dot(worldNormal, viewDir);
                 rampColor = rampColor + (1 - rampColor) * pow(NoV, 5);
+
+                // 高光
+                fixed NoH = saturate(dot(worldNormal, (lightDir + viewDir)));
+                fixed spec = pow(NoH, 5);
+
+                fixed3 specColor = spec * _SpecularColor;
                 
                 fixed3 occlusionColor = tex2D(_Occlusion, i.uv).xyz;
                 float occlusion = saturate(dot(occlusionColor, _unity_OcclusionMaskSelector));
-                
-
                 
                 fixed3 vec = (0.779084, 0.779084, 0.779084);
                 // 压暗
@@ -124,7 +128,7 @@
                 // apply fog
                 UNITY_APPLY_FOG(i.fogCoord, col);
 
-                return fixed4(rampColor, 1);
+                return fixed4(specColor, 1);
             }
             ENDCG
         }
