@@ -105,14 +105,17 @@
                 float4 diffuse = lerp(_FirstShadowMultColor, _SecondShadowMultColor, i.color.z);
                 float4 diffuseColor = diffuse * col;
 
-                
-                float threshold = halfLambert + ilmTex.g;
-                float secThreshold = _SecondShadow - threshold * 0.5 + _ShadowSmooth;
-                float  threshold1 = 1 / threshold;
+                float threshold = (halfLambert + ilmTex.g) * 0.5;
+                float ramp = smoothstep(0, _ShadowSmooth, threshold);
 
-                secThreshold = saturate(secThreshold * threshold1);
+                 float3 secDiffuseColor = col * _SecondShadowMultColor;
 
-                stmoothstep()
+                float3 shadowColor = lerp(col, diffuse, ramp);
+
+                if (threshold < _FirstShadow)
+                {
+                    shadowColor = diffuse;
+                }
 
                 //  ();
 

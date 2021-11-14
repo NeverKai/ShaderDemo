@@ -156,8 +156,6 @@ tf2.z = vec4(tf2.z * tf2.z).z;
 tf2.z = vec4(tf2.w * tf2.z).z;
 
 tf9.xyz = vec4(tf5.xyzx * __SecondShadowMultColor.xyzx).xyz;
-
-
 tf10.xyz = vec4(-tf8.xyzx).xyz;
 tf9.xyz = vec4(tf9.xyzx + tf10.xyzx).xyz;
 tf9.xyz = vec4(tf2.zzzz * tf9.xyzx).xyz;
@@ -190,15 +188,13 @@ tf0.w = vec4(min(vec4(tf0.w), vec4(1.00000))).w;
 tf2.w = vec4(tf0.w * -2.00000).w;
 tf2.w = vec4(tf2.w + 3.00000).w;
 tf0.w = vec4(tf0.w * tf0.w).w;
-
-
 tf9.xyz = vec4(tf2.wwww * tf0.wwww).xyz;
 
 tf7.xyz = vec4(tf5.xyzx * tf7.xyzx).xyz;
 tf10.xyz = vec4(-tf5.xyzx).xyz;
 tf7.xyz = vec4(tf7.xyzx + tf10.xyzx).xyz;
 tf9.xyz = vec4(tf9.xyzx).xyz;
-tf9.xyz = vec4(tf9.xyzx).xyz;
+
 tf7.xyz = vec4(tf7.xyzx * tf9.xyzx).xyz;
 tf7.xyz = vec4(tf5.xyzx + tf7.xyzx).xyz;
 if (bool(ti2.z))
@@ -228,9 +224,9 @@ tf1.xyz = ViewDir;
 // tf7.xyz = vec4(inversesqrt(tf0.wwww)).xyz;
 // tf8.xyz = vec4(tf7.zzzz).xyz;
 // tf8.xyz = vec4(tf8.xyzx).xyz;
+// tf8.xyz = vec4(tf1.xyzx * tf8.xyzx).xyz;
 tf8.xyz= normalize(ViewDir);
 
-tf8.xyz = vec4(tf1.xyzx * tf8.xyzx).xyz;
 tf7.xyz = vec4(tf7.xyzx).xyz;
 tf7.xyz = vec4(tf7.xyzx).xyz;
 tf1.xyz = vec4(tf1.xyzx * tf7.xyzx).xyz;
@@ -240,7 +236,7 @@ tf1.xyz = vec4(tf3.xyzx + tf1.xyzx).xyz;
 tf0.w = vec4(dot(vec4(tf1.xyzx).xyz, vec4(tf1.xyzx).xyz)).w;
 tf3.xyz = vec4(inversesqrt(tf0.wwww)).xyz;
 tf3.xyz = vec4(tf3.xyzx).xyz;
-tf3.xyz = vec4(tf3.xyzx).xyz;
+
 
 tf1.xyz = vec4(tf1.xyzx * tf3.xyzx).xyz;
 tf0.w = vec4(dot(vec4(tf0.xyzx).xyz, vec4(tf1.xyzx).xyz)).w;
@@ -318,7 +314,6 @@ tf0.yzw = vec4(tf0.yyzw).yzw;
 tf0.yzw = vec4(tf0.yyzw).yzw;
 tf0.yzw = vec4(tf0.yyzw * tf3.xxyz).yzw;
 tf1.xyz = vec4(ti1.yzwy + tf5.xyzx).xyz;
-
 
 
 tf3.xyz = vec4(vec4(2.00000, 2.00000, 2.00000, 0) * __LightColor0.xyzx).xyz;
