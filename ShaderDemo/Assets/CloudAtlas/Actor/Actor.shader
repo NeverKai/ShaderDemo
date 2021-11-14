@@ -4,14 +4,27 @@
     {
         _MainTex ("Texture", 2D) = "white" {}
         _MaskTex ("Texture", 2D) = "white" {}
-        _FirstShadow ("FirstShadow ID", Float) = 0.8
-        _SecondShadow ("SecondShadow ID", Float) = 0.5
+        _FirstShadow ("FirstShadow ID", Float) = 0.43
+        _SecondShadow ("SecondShadow ID", Float) = 0
         _FirstShadowMultColor ("Light Color", Color) = (1,0,0,1)
         _SecondShadowMultColor ("Light Color", Color) = (0,1,0,1)
+
+        _SpecSmooth ("SecondShadow ID", Float) = 0.314
+        _ShadowSmooth ("ShadowSmooth", Float) = 0.02
 
         _Shininess ("SecondShadow ID", Float) = 6
         _LightColor0 ("Light Color", Color) = (1,1,1,1)
         _LightSpecColor ("Light Spec Color", Color) = (1,1,1)
+        _CustomLightDir ("Custom Light Dir", Color) = (0.27641, 0.07001, 0.95849, 1.00)
+        _Color ("Color", Color) = (0.53774, 0.53774, 0.53774, 1.00)
+        _GlobalCharColor ("GlobalCharColor", Color) = (1.00, 1.00, 1.00, 1.00)
+
+        _MainTexInvisible ("MainTexInvisible", Float) = 0.0
+
+        _LightVector ("_LightVector", Color) = (24.30, 46.90, -113.37, 0.00)
+
+
+        _LightColorInt ("LightColorInt", Float) = 2.0
     }
     SubShader
     {
@@ -33,6 +46,7 @@
                 float4 vertex : POSITION;
                 float2 uv : TEXCOORD0;
                 float3 normal : NORMAL;
+                float3 color : TEXCOORD2;
             };
 
             struct v2f
@@ -42,17 +56,18 @@
                 float4 vertex : SV_POSITION;
                 float3 normal : NORMAL;
                 float3 worldPos : TEXCOORD1;
+                float3 color : TEXCOORD2;
             };
 
             sampler2D _MainTex;
             float4 _MainTex_ST, _LightColor0;
 
             sampler2D _MaskTex;
-            float4 _MaskTex_ST, _FirstShadowMultColor, _SecondShadowMultColor;
+            float4 _MaskTex_ST, _FirstShadowMultColor, _SecondShadowMultColor, _CustomLightDir, _Color, _GlobalCharColor;
 
             float3 _LightSpecColor;
 
-            float _FirstShadow, _SecondShadow, _Shininess;
+            float _FirstShadow, _SecondShadow, _Shininess, _SpecSmooth, _ShadowSmooth;
 
             v2f vert (appdata v)
             {
@@ -61,6 +76,7 @@
                 o.uv = TRANSFORM_TEX(v.uv, _MainTex);
                 o.worldPos = mul(unity_ObjectToWorld, v.vertex).xyz;
                 o.normal = UnityObjectToWorldNormal(v.normal);
+                o.color = v.color;
                 UNITY_TRANSFER_FOG(o,o.vertex);
                 return o;
             }
@@ -72,37 +88,52 @@
                 fixed4 ilmTex = tex2D(_MaskTex, i.uv);
 
                 // 漫反射
-                float3 lightWorldNormal = normalize(_WorldSpaceLightPos0.xyz);
+                fixed3 lightWorldDir = normalize(_WorldSpaceLightPos0.xyz);
+                fixed3 Color = _Color;
+                if (_CustomLightDir.w > 0.5)
+                {
+                    lightWorldDir = normalize(_CustomLightDir.rgb);
+                    Color *= _GlobalCharColor.rgb;
+                }
                 // [-1, 1]
-                float NoL = dot(i.normal, lightWorldNormal);
+                float NoL = dot(i.normal, lightWorldDir);
                 // [0, 1]
                 float halfLambert = NoL * 0.5 + 0.5;
-                float threshold = (halfLambert + ilmTex.g) * 0.5;
-                float ramp = saturate(_FirstShadow - threshold);
-                ramp = smoothstep(0, 0.02, ramp);
-                float4 diffuse = lerp(_FirstShadowMultColor, _SecondShadowMultColor, ramp);
-                diffuse *= col;
+                //float intensity = NoL > _FirstShadow ? 1.0f : intensity > _SecondShadow
+
+                //float ramp = saturate()
+                float4 diffuse = lerp(_FirstShadowMultColor, _SecondShadowMultColor, i.color.z);
+                float4 diffuseColor = diffuse * col;
 
                 
-                half3 viewDir = normalize(_WorldSpaceCameraPos.xyz - i.worldPos.xyz);
-                // 高光
-                float3 halfDir = normalize(viewDir + _WorldSpaceLightPos0);
-                float NoH = saturate(dot(i.normal, halfDir));
-                float intensity = pow(NoH, _Shininess);
+                float threshold = halfLambert + ilmTex.g;
+                float secThreshold = _SecondShadow - threshold * 0.5 + _ShadowSmooth;
+                float  threshold1 = 1 / threshold;
 
-                half3 specular = 0;
-                // 控制高光区域
-                half specularMask = ilmTex.b;
-                if (intensity >= 1 - specularMask)
-				{
-                    // r 光泽度，越粗糙灰度越小，越光滑灰度越大
-					specular = ilmTex.r * _LightSpecColor * intensity;
-				}
-                
-                col.rgb = (specular + diffuse)  * _LightColor0.rgb;
+                secThreshold = saturate(secThreshold * threshold1);
+
+                stmoothstep()
+
+                //  ();
+
+                // half3 viewDir = normalize(_WorldSpaceCameraPos.xyz - i.worldPos.xyz);
+                // // 高光
+                // float3 halfDir = normalize(viewDir + _WorldSpaceLightPos0);
+                // float NoH = saturate(dot(i.normal, halfDir));
+                // float intensity = pow(NoH, _Shininess);
+
+                // half3 specular = 0;
+                // // 控制高光区域
+                // half specularMask = ilmTex.b;
+                // if (intensity >= 1 - specularMask)
+				// {
+				// 	specular = (ilmTex.r) * _LightSpecColor * intensity;
+				// }
+
+                // col.rgb += specular  * _LightColor0.rgb;
                 // // apply fog
-                UNITY_APPLY_FOG(i.fogCoord, col);
-                return col;
+                // UNITY_APPLY_FOG(i.fogCoord, col);
+                return diffuseColor;
             }
             ENDCG
         }

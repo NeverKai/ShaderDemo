@@ -81,6 +81,8 @@ uvec4 uTempX[2];
 tf0.xyz = vec4(i_REGISTER2.xyzx).xyz;
 // worldPosition
 tf1.xyz = vec4(i_REGISTER3.xyzx).xyz;
+
+// 应该是顶点色，目前值都是0， 0， 0， 1
 tf2.xyz = vec4(i_REGISTER4.xyzx).xyz;
 
 //tf0.w = vec4(dot(vec4(tf0.xyzx).xyz, vec4(tf0.xyzx).xyz)).w;
@@ -96,9 +98,9 @@ if (bool(ti0.w))
     // tf0.w = vec4(inversesqrt(tf0.w)).w;
     // tf3.xyz = vec4(tf0.wwww * __CustomLightDir.xyzx).xyz;
     tf3.xyz = normalize(__CustomLightDir);
+    tf3.xyz = vec4(tf3.xyzx).xyz;
 
     tf4.xyz = vec4(__GlobalCharColor.xyzx * __Color.xyzx).xyz;
-    tf3.xyz = vec4(tf3.xyzx).xyz;
 }
 else
 {
@@ -109,15 +111,16 @@ else
     // tf6.xyz = vec4(inversesqrt(tf0.wwww)).xyz;
     // tf6.xyz = vec4(tf6.xyzx).xyz;
     // tf3.xyz = vec4(tf5.xyzx * tf6.xyzx).xyz;
-    tf3.xyz = normalize(viewDir);
+    tf3.xyz = normalize(lightWorldDir);
     tf4.xyz = vec4(__Color.xyzx).xyz;
 }
 
 //tf0.w = vec4(dot(vec4(tf0.xyzx).xyz, vec4(tf3.xyzx).xyz)).w;
 //tf0.w = vec4(tf0.w * 0.500000).w;
 //tf0.w = vec4(tf0.w + 0.500000).w;
-float NoL = dot(i.normal, lightWorldNormal);
+float NoL = dot(i.normal, lightWorldir);
 float halfLambert = NoL * 0.5 + 0.5;
+tf0.w = halfLambert;
 
 tf5.xyzw = vec4(texture(textures2D[0]_samplers2D[0], vec4(i_REGISTER5.xyxx).xy).xyzw).xyzw;
 
@@ -144,21 +147,23 @@ tf2.z = __SecondShadow - tf2.w * 0.5;
 tf2.w = vec4(__ShadowSmooth + __ShadowSmooth).w;
 tf2.z = vec4(tf2.z + __ShadowSmooth).z;
 tf2.w = vec4(1.00000 / tf2.w).w;
-
 tf2.z = vec4(tf2.z * tf2.w).z;
 tf2.z = vec4(max(vec4(tf2.z), vec4(0))).z;
 tf2.z = vec4(min(vec4(tf2.z), vec4(1.00000))).z;
-
-
 tf2.w = vec4(tf2.z * -2.00000).w;
 tf2.w = vec4(tf2.w + 3.00000).w;
 tf2.z = vec4(tf2.z * tf2.z).z;
 tf2.z = vec4(tf2.w * tf2.z).z;
+
 tf9.xyz = vec4(tf5.xyzx * __SecondShadowMultColor.xyzx).xyz;
+
+
 tf10.xyz = vec4(-tf8.xyzx).xyz;
 tf9.xyz = vec4(tf9.xyzx + tf10.xyzx).xyz;
 tf9.xyz = vec4(tf2.zzzz * tf9.xyzx).xyz;
 tf8.xyz = vec4(tf8.xyzx + tf9.xyzx).xyz;
+
+
 ti2.z = (float(tf6.y) >= float(0.500000)) ? -1 : 0;
 tf6.yw = vec4(tf6.yyyy * vec4(0, 1.20000, 0, 1.25000)).yw;
 tf6.yw = vec4(tf6.wwwy + vec4(0, -0.125000, 0, -0.100000)).yw;
@@ -174,6 +179,7 @@ tf6.y = vec4(tf6.y).y;
 tf0.w = vec4(tf0.w + tf6.y).w;
 tf2.z = vec4(tf0.w * 0.500000).z;
 ti2.z = (float(tf2.z) < float(__FirstShadow)) ? -1 : 0;
+
 tf0.w = vec4(-tf0.w).w;
 tf0.w = vec4(tf0.w * 0.500000).w;
 tf0.w = vec4(tf0.w + __FirstShadow).w;
@@ -184,7 +190,10 @@ tf0.w = vec4(min(vec4(tf0.w), vec4(1.00000))).w;
 tf2.w = vec4(tf0.w * -2.00000).w;
 tf2.w = vec4(tf2.w + 3.00000).w;
 tf0.w = vec4(tf0.w * tf0.w).w;
+
+
 tf9.xyz = vec4(tf2.wwww * tf0.wwww).xyz;
+
 tf7.xyz = vec4(tf5.xyzx * tf7.xyzx).xyz;
 tf10.xyz = vec4(-tf5.xyzx).xyz;
 tf7.xyz = vec4(tf7.xyzx + tf10.xyzx).xyz;
@@ -209,23 +218,30 @@ else
 {
     tf5.xyz = vec4(tf5.xyzx).xyz;
 }
-tf5.xyz = vec4(tf5.xyzx).xyz;
-tf1.xyz = vec4(-tf1.xyzx).xyz;
-tf1.xyz = vec4(tf1.xyzx + __WorldSpaceCameraPos.xyzx).xyz;
-tf0.w = vec4(dot(vec4(tf1.xyzx).xyz, vec4(tf1.xyzx).xyz)).w;
-tf7.xyz = vec4(inversesqrt(tf0.wwww)).xyz;
-tf8.xyz = vec4(tf7.zzzz).xyz;
-tf8.xyz = vec4(tf8.xyzx).xyz;
+
+// tf5.xyz = vec4(tf5.xyzx).xyz;
+// tf1.xyz = vec4(-tf1.xyzx).xyz;
+// tf1.xyz = vec4(tf1.xyzx + __WorldSpaceCameraPos.xyzx).xyz;
+tf1.xyz = ViewDir;
+
+// tf0.w = vec4(dot(vec4(tf1.xyzx).xyz, vec4(tf1.xyzx).xyz)).w;
+// tf7.xyz = vec4(inversesqrt(tf0.wwww)).xyz;
+// tf8.xyz = vec4(tf7.zzzz).xyz;
+// tf8.xyz = vec4(tf8.xyzx).xyz;
+tf8.xyz= normalize(ViewDir);
 
 tf8.xyz = vec4(tf1.xyzx * tf8.xyzx).xyz;
 tf7.xyz = vec4(tf7.xyzx).xyz;
 tf7.xyz = vec4(tf7.xyzx).xyz;
 tf1.xyz = vec4(tf1.xyzx * tf7.xyzx).xyz;
 tf1.xyz = vec4(tf3.xyzx + tf1.xyzx).xyz;
+
+
 tf0.w = vec4(dot(vec4(tf1.xyzx).xyz, vec4(tf1.xyzx).xyz)).w;
 tf3.xyz = vec4(inversesqrt(tf0.wwww)).xyz;
 tf3.xyz = vec4(tf3.xyzx).xyz;
 tf3.xyz = vec4(tf3.xyzx).xyz;
+
 tf1.xyz = vec4(tf1.xyzx * tf3.xyzx).xyz;
 tf0.w = vec4(dot(vec4(tf0.xyzx).xyz, vec4(tf1.xyzx).xyz)).w;
 tf0.w = vec4(max(vec4(tf0.w), vec4(0))).w;
@@ -260,20 +276,28 @@ else
     ti1.yzw = ivec4(ivec4(0, 0, 0, 0)).yzw;
 }
 ti1.yzw = ivec4(ti1.yyzw).yzw;
-tf0.w = vec4(dot(vec4(__LightVector.xyzw), vec4(__LightVector.xyzw))).w;
-tf3.xyz = vec4(inversesqrt(tf0.wwww)).xyz;
-tf3.xyz = vec4(tf3.xyzx).xyz;
-tf3.xyz = vec4(tf3.xyzx).xyz;
-tf3.xyz = vec4(tf3.xyzx * __LightVector.xyzx).xyz;
+
+// tf0.w = vec4(dot(vec4(__LightVector.xyzw), vec4(__LightVector.xyzw))).w;
+// tf3.xyz = vec4(inversesqrt(tf0.wwww)).xyz;
+// tf3.xyz = vec4(tf3.xyzx).xyz;
+// tf3.xyz = vec4(tf3.xyzx).xyz;
+// tf3.xyz = vec4(tf3.xyzx * __LightVector.xyzx).xyz;
+tf3.xyz = normalize(__LightVector);
+
+
 tf0.w = vec4(dot(vec4(tf3.xyzx).xyz, vec4(tf8.xyzx).xyz)).w;
 tf1.x = vec4(dot(vec4(tf3.xyzx).xyz, vec4(tf0.xyzx).xyz)).x;
 tf1.x = vec4(max(vec4(tf1.x), vec4(0))).x;
 tf1.x = vec4(min(vec4(tf1.x), vec4(1.00000))).x;
+
+
 tf0.x = vec4(dot(vec4(tf8.xyzx).xyz, vec4(tf0.xyzx).xyz)).x;
 tf0.x = vec4(-tf0.x).x;
 tf0.x = vec4(tf0.x + 1.00000).x;
 tf0.x = vec4(max(vec4(tf0.x), vec4(0))).x;
 tf0.x = vec4(min(vec4(tf0.x), vec4(1.00000))).x;
+
+
 tf0.y = vec4(-tf0.w).y;
 tf0.yzw = vec4(tf0.yyyy + vec4(0, 1.00000, 1.00000, 1.00000)).yzw;
 tf2.z = vec4(-__SmoothMin).z;
@@ -294,17 +318,13 @@ tf0.yzw = vec4(tf0.yyzw).yzw;
 tf0.yzw = vec4(tf0.yyzw).yzw;
 tf0.yzw = vec4(tf0.yyzw * tf3.xxyz).yzw;
 tf1.xyz = vec4(ti1.yzwy + tf5.xyzx).xyz;
+
+
+
 tf3.xyz = vec4(vec4(2.00000, 2.00000, 2.00000, 0) * __LightColor0.xyzx).xyz;
-
-tf5.x = vec4(__LightColorInt).x;
-tf5.y = vec4(__LightColorInt).y;
-tf5.z = vec4(__LightColorInt).z;
-
-tf5.xyz = vec4(tf5.xyzx).xyz;
-tf5.xyz = vec4(tf5.xyzx).xyz;
-tf5.xyz = vec4(-tf5.xyzx).xyz;
-
+tf5.xyz =  vec4(-__LightColorInt).xyz;
 tf3.xyz = vec4(tf3.xyzx + tf5.xyzx).xyz;
+
 tf5.xyz = vec4(__LightColorInf).xyz;
 tf3.xyz = vec4(tf3.xyzx * tf5.xyzx).xyz;
 
@@ -324,11 +344,8 @@ tf0.x = vec4(log2(tf0.x)).x;
 tf0.x = vec4(tf0.x * __FresnelRange).x;
 tf1.xyz = vec4(exp2(tf0.xxxx)).xyz;
 
-tf2.x = vec4(__MainTexInvisible).x;
-tf2.y = vec4(__MainTexInvisible).y;
-tf2.z = vec4(__MainTexInvisible).z;
+tf2.xyz = vec4(__MainTexInvisible).xyz;
 
-tf2.xyz = vec4(tf2.xyzx).xyz;
 tf1.xyz = vec4(tf1.xyzx).xyz;
 
 tf1.xyz = vec4(tf1.xyzx * tf2.xyzx).xyz;
