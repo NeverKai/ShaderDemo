@@ -205,6 +205,7 @@ else
 {
     tf5.xyz = vec4(tf5.xyzx).xyz;
 }
+
 tf5.xyz = vec4(tf5.xyzx).xyz;
 if (bool(ti1.w))
 {
@@ -215,7 +216,9 @@ else
     tf5.xyz = vec4(tf5.xyzx).xyz;
 }
 
-// tf5.xyz = vec4(tf5.xyzx).xyz;
+tf5.xyz = vec4(tf5.xyzx).xyz;
+
+
 // tf1.xyz = vec4(-tf1.xyzx).xyz;
 // tf1.xyz = vec4(tf1.xyzx + __WorldSpaceCameraPos.xyzx).xyz;
 tf1.xyz = ViewDir;
@@ -286,13 +289,11 @@ tf1.x = vec4(dot(vec4(tf3.xyzx).xyz, vec4(tf0.xyzx).xyz)).x;
 tf1.x = vec4(max(vec4(tf1.x), vec4(0))).x;
 tf1.x = vec4(min(vec4(tf1.x), vec4(1.00000))).x;
 
-
 tf0.x = vec4(dot(vec4(tf8.xyzx).xyz, vec4(tf0.xyzx).xyz)).x;
 tf0.x = vec4(-tf0.x).x;
 tf0.x = vec4(tf0.x + 1.00000).x;
 tf0.x = vec4(max(vec4(tf0.x), vec4(0))).x;
 tf0.x = vec4(min(vec4(tf0.x), vec4(1.00000))).x;
-
 
 tf0.y = vec4(-tf0.w).y;
 tf0.yzw = vec4(tf0.yyyy + vec4(0, 1.00000, 1.00000, 1.00000)).yzw;
@@ -324,8 +325,8 @@ tf5.xyz = vec4(__LightColorInf).xyz;
 tf3.xyz = vec4(tf3.xyzx * tf5.xyzx).xyz;
 
 tf5.xyz = vec4(__LightColorInt).xyz;
-
 tf3.xyz = vec4(tf3.xyzx + tf5.xyzx).xyz;
+
 tf1.xyz = vec4(tf1.xyzx * tf3.xyzx).xyz;
 tf1.xyz = vec4(tf1.xyzx * tf4.xyzx).xyz;
 
@@ -334,6 +335,8 @@ tf0.yzw = vec4(tf0.yyzw + tf1.xxyz).yzw;
 tf1.xyz = vec4(tf2.xxxx * __EmissiveColorA.xyzx).xyz;
 tf0.yzw = vec4(tf0.yyzw + tf1.xxyz).yzw;
 tf1.xyz = vec4(tf2.yyyy * __EmissiveColorB.xyzx).xyz;
+
+
 tf0.yzw = vec4(tf0.yyzw + tf1.xxyz).yzw;
 tf0.x = vec4(log2(tf0.x)).x;
 tf0.x = vec4(tf0.x * __FresnelRange).x;
@@ -347,10 +350,11 @@ tf1.xyz = vec4(tf1.xyzx * tf2.xyzx).xyz;
 tf0.xyz = vec4(tf0.yzwy + tf1.xyzx).xyz;
 
 
-tf1.x = vec4(-tf5.w).x;
-tf1.x = vec4(tf1.x + 0.400000).x;
-tf1.x = vec4(tf1.x * __MainTexInvisible).x;
-tf0.w = vec4(tf5.w + tf1.x).w;
+// tf1.x = vec4(-tf5.w).x;
+// tf1.x = vec4(tf1.x + 0.400000).x;
+// tf1.x = vec4(tf1.x * __MainTexInvisible).x;
+// tf0.w = vec4(tf5.w + tf1.x).w;
+tf0.w  = lerp(tf5.w, 0.4, __MainTexInvisible)
 
 tf0.xyzw = vec4(tf0.xyzw).xyzw;
 

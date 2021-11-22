@@ -7,7 +7,7 @@ smooth in vec4 v_TEXCOORD2;
 smooth in vec4 v_TEXCOORD3;
 smooth in vec4 v_TEXCOORD4;  // position
 smooth in vec4 v_TEXCOORD5;  // 顶点色
-smooth in vec4 v_TEXCOORD6;  
+smooth in vec4 v_TEXCOORD6;
 
 layout(location=0) out vec4 v_SV_TARGET0;
 
@@ -39,7 +39,7 @@ vec4 __ColorIntensity;
 };
 
 uniform sampler2D textures2D[0]_samplers2D[0];  // ramp
-uniform sampler2D textures2D[1]_samplers2D[1];  // 多通道mask 
+uniform sampler2D textures2D[1]_samplers2D[1];  // 多通道mask
 uniform sampler2D textures2D[2]_samplers2D[2];  // 白色
 uniform sampler2D textures2D[3]_samplers2D[3];  // seems like base color
 uniform sampler2D textures2D[4]_samplers2D[4];  // 红色通道图
@@ -55,7 +55,7 @@ vec4 i_REGISTER4;
 vec4 i_REGISTER5;
 vec4 i_REGISTER6;
 vec4 i_REGISTER7;
-vec4 i_REGISTER8; 
+vec4 i_REGISTER8;
 i_REGISTER2.xyzw = v_TEXCOORD0.xyzw;    // uv
 i_REGISTER3.xyzw = v_TEXCOORD1.xyzw;     // uv2
 i_REGISTER4.xyzw = v_TEXCOORD2.xyzw;
@@ -226,7 +226,7 @@ tf0.x = saturate(NoH)
 tf0.y = saturate(LoH)
 
 
-// tf3 ramp 
+// tf3 ramp
 tf3.xyz = vec4(tf3.xyzx * __Color.xyzx).xyz;
 
 //tf3.xyz = vec4(tf3.xyzx + vec4(-0.220916, -0.220916, -0.220916, 0)).xyz;
@@ -430,10 +430,10 @@ tf0.w = vec4(tf0.z * tf2.w).w;
 // gloss +  NoV tf2.w * roughness
 tf0.w = vec4(tf1.w + tf0.w).w;
 
-// NoL tf8.w  * roughness
+// NoL tf8.z  * roughness
 tf0.z = vec4(tf0.z * tf8.z).z;
 
-// gloss + NoL tf8.w  * roughness
+// gloss + NoV tf8.w  * roughness
 tf0.z = vec4(tf1.w + tf0.z).z;
 
 // 相乘
@@ -450,7 +450,12 @@ tf1.x = vec4(tf0.w * tf0.w).x;
 tf0.w = vec4(tf0.w * tf0.w).w;
 tf0.w = vec4(tf0.w + -1.00000).w;
 
+tf0.w = 1 - pow(gloss, 4);
+
+// NoH
 tf0.x = vec4(tf0.x * tf0.x).x;
+
+
 tf0.x = vec4(tf0.w * tf0.x).x;
 tf0.x = vec4(tf0.x + 1.00000).x;
 tf0.x = vec4(tf0.x * tf0.x).x;
@@ -469,48 +474,50 @@ tf0.w = 1 - tf0.y;
 // tf1.x = vec4(tf0.w * tf0.w).x;
 // tf1.x = vec4(tf1.x * tf1.x).x;
 // tf0.w = vec4(tf0.w * tf1.x).w;
-tf0.w = pow(tf0.w, 5)
+tf0.w = pow(1 - LoH, 5)
 
 // (1 - LoH)(1 - ramp) = 1 -ramp - LoH + LoH * ramp
 tf7.xyz = vec4(tf0.wwww * tf7.xyzx).xyz;
 
-// 
 tf3.xyz = vec4(tf3.xyzx + tf7.xyzx).xyz;
-
 tf0.xzw = vec4(tf0.zzzz * tf0.xxxx).xzw;
 tf0.xzw = vec4(tf0.xxzw).xzw;
-
 tf0.xzw = vec4(tf0.xxzw * tf3.xxyz).xzw;
 
-tf0.xzw = vec4(tf0.xxzw * __SpecularColor.xxyz).xzw;
+tf0.xzw = vec4(tf0.xzw * __SpecularColor.xyz).xzw;
 tf0.xzw = vec4(max(vec4(tf0.xxzw), vec4(vec4(0, 0, 0, 0)))).xzw;
 tf0.xzw = vec4(min(vec4(tf0.xxzw), vec4(vec4(1.00000, 0, 1.00000, 1.00000)))).xzw;
 
 
 tf1.x = vec4(tf1.w + tf1.w).x;
 tf1.x = vec4(tf0.y * tf1.x).x;
-
 tf0.y = vec4(tf0.y * tf1.x).y;
 tf0.y = vec4(tf0.y + 0.500000).y;
 tf0.y = vec4(tf0.y + -1.00000).y;
+
+
 // tf1.x = vec4(-tf8.z).x;
 // tf1.x = vec4(tf1.x + 1.00000).x;
-
 //  tf8.z : NoL
 tf1.x = 1 - tf8.z;
-//tf1.y = vec4(tf1.x * tf1.x).y;
-//tf1.y = vec4(tf1.y * tf1.y).y;
-//tf1.x = vec4(tf1.y * tf1.x).x;
+
+// tf1.y = vec4(tf1.x * tf1.x).y;
+// tf1.y = vec4(tf1.y * tf1.y).y;
+// tf1.x = vec4(tf1.y * tf1.x).x;
+// tf1.x = vec4(tf0.y * tf1.x).x;
 tf1.x = pow(tf1.x, 5)
-tf1.x = vec4(tf0.y * tf1.x).x;
-tf1.xyw = vec4(tf1.xxxx + vec4(1.00000, 1.00000, 0, 1.00000)).xyw;
+
+//tf1.xyw = vec4(tf1.xxxx + vec4(1.00000, 1.00000, 0, 1.00000)).xyw;
+
 tf1.xyw = vec4(tf4.xyxz * tf1.xyxw).xyw;
 
 tf0.y = vec4(tf1.z * tf0.y).y;
 tf0.y = vec4(tf0.y + 1.00000).y;
+
 tf1.xyz = vec4(tf0.yyyy * tf1.xywx).xyz;
 
 // 这两步感觉像 (diffuss + specular) * lightColor
+// tf0 为高光
 tf0.xyz = vec4(tf0.xzwx + tf1.xyzx).xyz;
 tf0.xyz = vec4(tf0.xyzx * __LightColor0.xyzx).xyz;
 

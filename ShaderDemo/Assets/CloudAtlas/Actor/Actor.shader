@@ -4,27 +4,29 @@
     {
         _MainTex ("Texture", 2D) = "white" {}
         _MaskTex ("Texture", 2D) = "white" {}
-        _FirstShadow ("FirstShadow ID", Float) = 0.43
-        _SecondShadow ("SecondShadow ID", Float) = 0
-        _FirstShadowMultColor ("Light Color", Color) = (1,0,0,1)
-        _SecondShadowMultColor ("Light Color", Color) = (0,1,0,1)
+        _FirstShadow ("FirstShadow", Float) = 0.46
+        _SecondShadow ("SecondShadow", Float) = 0
+        _FirstShadowMultColor ("FirstShadowMultColor", Color) = (0.99,0.86,0.82,1)
+        _SecondShadowMultColor ("SecondShadowMultColor", Color) = (0.75,0.6,0.65,1)
 
-        _SpecSmooth ("SecondShadow ID", Float) = 0.314
+        _SpecSmooth ("SecondShadow ID", Float) = 0.173
         _ShadowSmooth ("ShadowSmooth", Float) = 0.02
 
-        _Shininess ("SecondShadow ID", Float) = 6
-        _LightColor0 ("Light Color", Color) = (1,1,1,1)
+        _Shininess ("Shininess", Float) = 23.8
+        _LightColor0 ("Light Color", Color) = (0.65094, 0.60393, 0.53734, 1.00)
         _LightSpecColor ("Light Spec Color", Color) = (1,1,1)
-        _CustomLightDir ("Custom Light Dir", Color) = (0.27641, 0.07001, 0.95849, 1.00)
+        _CustomLightDir ("Custom Light Dir", Color) = (0.57, 0.82, -0.01, 1.00)
         _Color ("Color", Color) = (0.53774, 0.53774, 0.53774, 1.00)
+
         _GlobalCharColor ("GlobalCharColor", Color) = (1.00, 1.00, 1.00, 1.00)
 
         _MainTexInvisible ("MainTexInvisible", Float) = 0.0
 
         _LightVector ("_LightVector", Color) = (24.30, 46.90, -113.37, 0.00)
-
-
         _LightColorInt ("LightColorInt", Float) = 2.0
+        _LightColorInf ("LightColorInf", Float) = 0.18
+
+        _FresnelRange ("FresnelRange", Float) = 2.5
     }
     SubShader
     {
@@ -67,7 +69,7 @@
 
             float3 _LightSpecColor;
 
-            float _FirstShadow, _SecondShadow, _Shininess, _SpecSmooth, _ShadowSmooth;
+            float _FirstShadow, _SecondShadow, _Shininess, _SpecSmooth, _ShadowSmooth, _LightColorInt, _LightColorInf;
 
             v2f vert (appdata v)
             {
@@ -88,6 +90,8 @@
                 fixed4 ilmTex = tex2D(_MaskTex, i.uv);
 
                 // 漫反射
+
+                // 世界灯光方向
                 fixed3 lightWorldDir = normalize(_WorldSpaceLightPos0.xyz);
                 fixed3 Color = _Color;
                 if (_CustomLightDir.w > 0.5)
@@ -99,9 +103,7 @@
                 float NoL = dot(i.normal, lightWorldDir);
                 // [0, 1]
                 float halfLambert = NoL * 0.5 + 0.5;
-                //float intensity = NoL > _FirstShadow ? 1.0f : intensity > _SecondShadow
 
-                //float ramp = saturate()
                 float4 diffuse = lerp(_FirstShadowMultColor, _SecondShadowMultColor, i.color.z);
                 float4 diffuseColor = diffuse * col;
 
@@ -116,6 +118,8 @@
                 {
                     shadowColor = diffuse;
                 }
+
+                float4 lightColor = (2 * _LightColor0 - _LightColorInt) * _LightColorInf;
 
                 //  ();
 
@@ -136,6 +140,8 @@
                 // col.rgb += specular  * _LightColor0.rgb;
                 // // apply fog
                 // UNITY_APPLY_FOG(i.fogCoord, col);
+
+
                 return diffuseColor;
             }
             ENDCG
