@@ -1,0 +1,245 @@
+#version 430
+
+layout(location=0) in vec4 TEXCOORD0;
+layout(location=1) in vec4 TEXCOORD1;
+layout(location=2) in vec4 TEXCOORD2;
+
+smooth out vec4 v_TEXCOORD4In;
+smooth out vec4 v_TEXCOORD0In;
+smooth out vec4 v_TEXCOORD1In;
+smooth out vec4 v_TEXCOORD2In;
+smooth out vec4 v_TEXCOORD3In;
+
+layout(binding=0) uniform $Globals
+{
+vec3 __WorldSpaceCameraPos;
+vec4 _hlslcc_mtx4x4unity_MatrixVP[4];
+};
+
+layout(binding=2) uniform UnityPerDraw
+{
+vec4 _hlslcc_mtx4x4unity_ObjectToWorld[4];
+vec4 _hlslcc_mtx4x4unity_WorldToObject[4];
+vec4 _unity_LODFade;
+vec4 _unity_WorldTransformParams;
+vec4 _unity_LightData;
+vec4 _unity_LightIndices[2];
+vec4 _unity_ProbesOcclusion;
+vec4 _unity_SpecCube0_HDR;
+vec4 _unity_LightmapST;
+vec4 _unity_DynamicLightmapST;
+vec4 _unity_SHAr;
+vec4 _unity_SHAg;
+vec4 _unity_SHAb;
+vec4 _unity_SHBr;
+vec4 _unity_SHBg;
+vec4 _unity_SHBb;
+vec4 _unity_SHC;
+};
+
+layout(binding=3) uniform UnityPerMaterial
+{
+vec4 __MainTex_ST;
+vec4 __ThirTexColor;
+float __ThirdTexAddMode;
+float __FlowSpeedX;
+float __FlowSpeedY;
+float __ShiningBrightness;
+float __ShiningStrength;
+float __ShiningSpeed;
+vec4 __FourthTexColor;
+float __FourthTexBrightness;
+vec4 __RimColor;
+vec4 __SPRimColor;
+float __LightThreshold;
+float __SPRimShiningBaseBrightness;
+float __SPRimAddStrength;
+float __SPRimShiningStrength;
+float __SPRimShiningSpeed;
+float __SpecularRange;
+float __SpecularTransitionRange;
+float __RimThreshold;
+float __FPower;
+float __F0;
+float __SPRimThreshold;
+float __SPFPower;
+float __SPF0;
+vec4 __RainEffectTexture_ST;
+vec4 __RainWarpTexture_ST;
+float __RainSmoothness;
+float __RainTexTilling;
+float __RainMaskTilling;
+float __RainWarpSpeed;
+float __RainEffectSpeed;
+float __RainMaskSpeed;
+vec4 __RainLightDir;
+float __WarpIntensity;
+float __DissolveValue;
+vec4 __Color;
+vec4 __SpecularColor;
+vec4 __HighlightColor;
+vec4 __ShadowColor;
+vec4 __EmissionColor;
+float __ShadowIntensity;
+float __TransitionRange;
+float __TransitionIntensity;
+vec4 __RampColor;
+vec4 __MaskTex_ST;
+float __RampSaturation;
+float __RampStrength;
+float __RampBrightness;
+float __RampGloss;
+float __RampGlossPower;
+float __RampScale;
+float __ToonSpecThreshold;
+float __ToonSpecStrength;
+float __ToonSpecTransitionRange;
+vec4 _GlobalSoFunnyParam;
+};
+
+
+void main()
+{
+vec4 i_REGISTER0;
+vec4 i_REGISTER1;
+vec4 i_REGISTER2;
+i_REGISTER0.xyzw = TEXCOORD0.xyzw;
+i_REGISTER1.xy = TEXCOORD1.xy;
+i_REGISTER2.xyz = TEXCOORD2.xyz;
+
+vec4 o_REGISTER0;
+vec4 o_REGISTER1;
+vec4 o_REGISTER2;
+vec4 o_REGISTER3;
+vec4 o_REGISTER4;
+vec4 o_REGISTER5;
+
+vec4 tf0;
+ivec4 ti0;
+vec4 tf1;
+ivec4 ti1;
+vec4 tf2;
+ivec4 ti2;
+vec4 tf3;
+ivec4 ti3;
+vec4 tf4;
+ivec4 ti4;
+vec4 tf5;
+ivec4 ti5;
+vec4 tf6;
+ivec4 ti6;
+ivec4 iTempX[2];
+uvec4 uTempX[2];
+
+tf0.xyz = vec4(i_REGISTER0.xyzx).xyz;
+tf1.xyz = vec4(i_REGISTER2.xyzx).xyz;
+tf2.xy = vec4(i_REGISTER1.xyxx).xy;
+tf0.xyz = vec4(tf0.xyzx).xyz;
+tf2.xy = vec4(tf2.xyxx).xy;
+tf1.xyz = vec4(tf1.xyzx).xyz;
+tf3.xyz = vec4(tf0.yyyy * _hlslcc_mtx4x4unity_ObjectToWorld[1].xyzx).xyz;
+tf4.xyz = vec4(tf0.xxxx * _hlslcc_mtx4x4unity_ObjectToWorld[0].xyzx).xyz;
+tf3.xyz = vec4(tf3.xyzx + tf4.xyzx).xyz;
+tf4.xyz = vec4(tf0.zzzz * _hlslcc_mtx4x4unity_ObjectToWorld[2].xyzx).xyz;
+tf3.xyz = vec4(tf3.xyzx + tf4.xyzx).xyz;
+tf3.xyz = vec4(tf3.xyzx + _hlslcc_mtx4x4unity_ObjectToWorld[3].xyzx).xyz;
+tf4.xyzw = vec4(tf3.yyyy * _hlslcc_mtx4x4unity_MatrixVP[1].xyzw).xyzw;
+tf5.xyzw = vec4(tf3.xxxx * _hlslcc_mtx4x4unity_MatrixVP[0].xyzw).xyzw;
+tf4.xyzw = vec4(tf4.xyzw + tf5.xyzw).xyzw;
+tf5.xyzw = vec4(tf3.zzzz * _hlslcc_mtx4x4unity_MatrixVP[2].xyzw).xyzw;
+tf4.xyzw = vec4(tf4.xyzw + tf5.xyzw).xyzw;
+tf3.xyz = vec4(tf3.xyzx).xyz;
+tf4.xyzw = vec4(tf4.xyzw + _hlslcc_mtx4x4unity_MatrixVP[3].xyzw).xyzw;
+tf2.xy = vec4(tf2.xyxx * __MainTex_ST.xyxx).xy;
+tf2.xy = vec4(tf2.xyxx + __MainTex_ST.zwzz).xy;
+tf5.xyz = vec4(_hlslcc_mtx4x4unity_WorldToObject[1].xyzx * __WorldSpaceCameraPos.yyyy).xyz;
+tf6.xyz = vec4(_hlslcc_mtx4x4unity_WorldToObject[0].xyzx * __WorldSpaceCameraPos.xxxx).xyz;
+tf5.xyz = vec4(tf5.xyzx + tf6.xyzx).xyz;
+tf6.xyz = vec4(_hlslcc_mtx4x4unity_WorldToObject[2].xyzx * __WorldSpaceCameraPos.zzzz).xyz;
+tf5.xyz = vec4(tf5.xyzx + tf6.xyzx).xyz;
+tf5.xyz = vec4(tf5.xyzx + _hlslcc_mtx4x4unity_WorldToObject[3].xyzx).xyz;
+tf0.xyz = vec4(-tf0.xyzx).xyz;
+tf0.xyz = vec4(tf0.xyzx + tf5.xyzx).xyz;
+tf0.w = vec4(dot(vec4(tf0.xyzx).xyz, vec4(tf0.xyzx).xyz)).w;
+tf5.xyz = vec4(inversesqrt(tf0.wwww)).xyz;
+tf5.xyz = vec4(tf5.xyzx).xyz;
+tf5.xyz = vec4(tf5.xyzx).xyz;
+tf0.xyz = vec4(tf0.xyzx * tf5.xyzx).xyz;
+tf0.x = vec4(dot(vec4(tf1.xyzx).xyz, vec4(tf0.xyzx).xyz)).x;
+tf0.x = vec4(-tf0.x).x;
+tf0.x = vec4(tf0.x + 1.00000).x;
+tf0.x = vec4(max(vec4(tf0.x), vec4(0))).x;
+tf0.x = vec4(min(vec4(tf0.x), vec4(1.00000))).x;
+tf0.x = vec4(log2(tf0.x)).x;
+tf0.x = vec4(tf0.x * __FPower).x;
+tf0.x = vec4(exp2(tf0.x)).x;
+tf0.y = vec4(-__F0).y;
+tf0.y = vec4(tf0.y + 1.00000).y;
+tf0.x = vec4(tf0.x * tf0.y).x;
+tf0.w = vec4(tf0.x + __F0).w;
+tf5.w = vec4(dot(vec4(tf1.xyzx).xyz, vec4(_hlslcc_mtx4x4unity_WorldToObject[0].xyzx).xyz)).w;
+tf5.x = vec4(dot(vec4(tf1.xyzx).xyz, vec4(_hlslcc_mtx4x4unity_WorldToObject[1].xyzx).xyz)).x;
+tf5.z = vec4(dot(vec4(tf1.xyzx).xyz, vec4(_hlslcc_mtx4x4unity_WorldToObject[2].xyzx).xyz)).z;
+tf5.yz = vec4(tf5.zzzz).yz;
+tf1.x = vec4(dot(vec4(tf5.xzwx).xyz, vec4(tf5.xzwx).xyz)).x;
+tf1.x = vec4(max(vec4(tf1.x), vec4(0))).x;
+tf1.xyzw = vec4(inversesqrt(tf1.xxxx)).xyzw;
+tf1.xyzw = vec4(tf1.xyzw).xyzw;
+tf1.xyzw = vec4(tf1.xyzw).xyzw;
+tf1.xyzw = vec4(tf5.wxyz * tf1.wxyz).xyzw;
+tf0.xyz = vec4(tf1.xyzx).xyz;
+ti3.w = ivec4(0).w;
+tf2.z = vec4(tf1.y * tf1.y).z;
+tf2.w = vec4(tf1.x * tf1.x).w;
+tf2.z = vec4(-tf2.z).z;
+tf2.z = vec4(tf2.z + tf2.w).z;
+tf5.xyzw = vec4(tf1.xywz * tf1.yzwx).xyzw;
+tf6.x = vec4(dot(vec4(_unity_SHBr.xyzw), vec4(tf5.xyzw))).x;
+tf6.y = vec4(dot(vec4(_unity_SHBg.xyzw), vec4(tf5.xyzw))).y;
+tf6.z = vec4(dot(vec4(_unity_SHBb.xyzw), vec4(tf5.xyzw))).z;
+tf5.xyz = vec4(tf2.zzzz * _unity_SHC.xyzx).xyz;
+tf5.xyz = vec4(tf6.xyzx + tf5.xyzx).xyz;
+tf1.w = vec4(1.00000).w;
+tf6.x = vec4(dot(vec4(_unity_SHAr.xyzw), vec4(tf1.xyzw))).x;
+tf6.y = vec4(dot(vec4(_unity_SHAg.xyzw), vec4(tf1.xyzw))).y;
+tf6.z = vec4(dot(vec4(_unity_SHAb.xyzw), vec4(tf1.xyzw))).z;
+tf1.xyz = vec4(tf5.xyzx + tf6.xyzx).xyz;
+tf1.xyz = vec4(max(vec4(tf1.xyzx), vec4(vec4(0, 0, 0, 0)))).xyz;
+tf4.xyzw = vec4(tf4.xyzw).xyzw;
+tf5.x = vec4(tf4.x).x;
+tf5.y = vec4(-tf4.y).y;
+tf1.w = vec4(tf4.w + tf4.z).w;
+tf5.z = vec4(tf1.w * 0.500000).z;
+tf5.w = vec4(tf4.w).w;
+tf0.xyz = vec4(tf0.xyzx).xyz;
+tf0.w = vec4(tf0.w).w;
+tf3.xyz = vec4(tf3.xyzx).xyz;
+ti3.w = ivec4(ti3.w).w;
+tf1.xyz = vec4(tf1.xyzx).xyz;
+tf2.xy = vec4(tf2.xyxx).xy;
+tf5.x = vec4(tf5.x).x;
+tf5.y = vec4(tf5.y).y;
+tf5.z = vec4(tf5.z).z;
+tf5.w = vec4(tf5.w).w;
+tf4.xyzw = vec4(tf4.xyzw).xyzw;
+tf0.xyzw = vec4(tf0.xyzw).xyzw;
+tf3.xyzw = vec4(tf3.xyzw).xyzw;
+tf1.xyz = vec4(tf1.xyzx).xyz;
+tf2.xy = vec4(tf2.xyxx).xy;
+
+o_REGISTER0.xyzw = vec4(tf5.xyzw).xyzw;
+o_REGISTER1.xyzw = vec4(tf4.xyzw).xyzw;
+o_REGISTER2.xyzw = vec4(tf0.xyzw).xyzw;
+o_REGISTER3.xyzw = vec4(tf3.xyzw).xyzw;
+o_REGISTER4.xyz = vec4(tf1.xyzx).xyz;
+o_REGISTER5.xy = vec4(tf2.xyxx).xy;
+
+gl_Position.xyzw = o_REGISTER0.xyzw;
+v_TEXCOORD4In.xyzw = o_REGISTER1.xyzw;
+v_TEXCOORD0In.xyzw = o_REGISTER2.xyzw;
+v_TEXCOORD1In.xyzw = o_REGISTER3.xyzw;
+v_TEXCOORD2In.xyz = o_REGISTER4.xyz;
+v_TEXCOORD3In.xy = o_REGISTER5.xy;
+return;
+
+}
