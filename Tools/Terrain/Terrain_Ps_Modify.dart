@@ -42,7 +42,7 @@ uniform sampler2D textures2D[0]_samplers2D[0];  // ramp
 uniform sampler2D textures2D[1]_samplers2D[1];  // 多通道mask
 uniform sampler2D textures2D[2]_samplers2D[2];  // 白色
 uniform sampler2D textures2D[3]_samplers2D[3];  // seems like base color
-uniform sampler2D textures2D[4]_samplers2D[4];  // 红色通道图
+uniform sampler2D textures2D[4]_samplers2D[4];  // 红色通道图 感觉像ao
 
 uniform samplerCube texturesCube[0]_samplersCube[0];
 uniform samplerCube texturesCube[1]_samplersCube[1];
@@ -239,8 +239,6 @@ tf3.xyz = lerp(vec4(0.220916, 0.220916, 0.220916, 0), tf3.xyz, tf0.w);
 // tf0.z = vec4(tf0.z * __Metallic).z;
 // tf0.z = vec4(tf0.z + 1.00000).z;
 tf0.z = 1 - tf5.x * __Metallic;
-tf5.xyw = vec4(tf0.zzzz * vec4(0.779084, 0.779084, 0, 0.779084)).xyw;
-tf4.xyz = vec4(tf4.xyzx * tf5.xywx).xyz;
 
 // 类似 lightmap
 tf5.xyw = vec4(texture(textures2D[3]_samplers2D[3], vec4(i_REGISTER3.xyxx).xy).xywz).xyw;
@@ -392,8 +390,7 @@ if (bool(ti3.w))
     tf11.xyz = vec4(tf11.xyzx).xyz;
 }
 
-tf0.z = vec4(tf0.z * 0.779084).z;
-tf0.z = vec4(tf1.w + tf0.z).z;
+tf0.z = vec4(tf1.w + tf0.z* 0.779084).z;
 tf0.z = vec4(-tf0.z).z;
 
 tf0.z = vec4(tf0.z + 2.00000).z;
@@ -409,11 +406,12 @@ tf0.z = vec4(min(vec4(tf0.z), vec4(1.00000))).z;
 tf1.xyz = pow(1.00000 - tf2.w, 5);
 
 // F0 + (1.0 - F0) * pow(1.0 - cosTheta, 5.0);
-tf6.xyz = vec4(-tf3.xyzx).xyz;
-tf6.xyz = vec4(tf0.zzzz + tf6.xyzx).xyz;
-tf6.xyz = vec4(tf6.xyzx * tf1.xyzx).xyz;
+// tf3 = F0
+//tf6.xyz = vec4(-tf3.xyzx).xyz;
+//tf6.xyz = vec4(tf0.zzzz + tf6.xyzx).xyz;
+//tf6.xyz = vec4(tf6.xyzx * tf1.xyzx).xyz;
 
-// tf3 ramp
+tf6.xyz = (tf0.zzzz-tf3.xyzx) * tf1.xyzx;
 tf6.xyz = vec4(tf3.xyzx + tf6.xyzx).xyz;
 
 

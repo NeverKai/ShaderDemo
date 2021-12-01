@@ -89,17 +89,13 @@
                 float roughness = 1 - maskColor.y * _Glossiness;
                 float nonMetallic = 1 - metallic;
 
-                rampColor = lerp(rampColor.xyz, fixed3(0.220916, 0.220916, 0.220916), metallic);
+                // rampColor = lerp(rampColor.xyz, fixed3(0.220916, 0.220916, 0.220916), metallic);
+                rampColor = lerp(fixed3(0.220916, 0.220916, 0.220916), rampColor.xyz,  metallic);
 
                 fixed3 lightDir = normalize(_WorldSpaceLightPos0);
                 fixed3 viewDir = normalize(_WorldSpaceCameraPos.xyz - i.vertex);
                 fixed3 worldNormal = normalize(i.worldNormal);
-                // 菲涅尔近似项
-                // // F0 + (1.0 - F0) * pow(1.0 - cosTheta, 5.0);
-                fixed NoV = dot(worldNormal, viewDir);
-                fixed pow1 = pow(1 - NoV, 5);
-                fixed3 rimColor = fixed3(pow1, pow1, pow1) + fixed3(1, 1, 1);
-                //rimColor = rampColor * rimColor;
+
 
                 // 高光
                 fixed NoH = saturate(dot(worldNormal, (lightDir + viewDir)));
@@ -110,20 +106,30 @@
                 fixed3 occlusionColor = tex2D(_Occlusion, i.uv).xyz;
                 float occlusion = saturate(dot(occlusionColor, _unity_OcclusionMaskSelector));
 
-                fixed3 vec = (0.779084, 0.779084, 0.779084);
-                // 压暗
-                rampColor.xyz =  rampColor.xyz * nonMetallic * vec;
+                // 菲涅尔近似项
+                // // F0 + (1.0 - F0) * pow(1.0 - cosTheta, 5.0);
+                // F0 = ramp
+                fixed NoV = dot(worldNormal, viewDir);
+                fixed pow1 = pow(1 - NoV, 5);
+                // fixed3 rimColor = fixed3(pow1, pow1, pow1) + fixed3(1, 1, 1);
+                // rimColor = rampColor * rimColor;
+
+                fixed value = saturate(2 - nonMetallic *  0.779084 + roughness);
+
+                fixed3 frenelColor = rampColor + (value - rampColor) * pow1;
+
+
 
                  // 基础色
                 fixed3 lightMapColor = tex2D(_LightMapTex, i.uv2).xyz;
                 // _unity_Lightmap_HDR （2，1，0，0）
                 lightMapColor *= 2;
-                lightMapColor *= rampColor;
+                // lightMapColor *= rampColor;
 
 
                 fixed4 color = fixed4(rampColor, _Color.w);
                 color.rgb *= occlusion;
-                color.rgb += i.VertexColor;
+                // color.rgb += i.VertexColor;
 
                 // diffuse 包含 base color  正常的光照模型
                 // color = (diffuse + specular + rimColor) * _LightColor0.rgb;
@@ -131,7 +137,7 @@
                 // apply fog
                 UNITY_APPLY_FOG(i.fogCoord, col);
 
-                return fixed4(rimColor, 1);
+                return fixed4(rampColor, 1);
             }
             ENDCG
         }
