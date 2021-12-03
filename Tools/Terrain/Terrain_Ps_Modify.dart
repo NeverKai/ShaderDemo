@@ -139,7 +139,6 @@ tf7.xyz = normalize(__WorldSpaceLightPos0);
 //tf2.w = vec4(dot(vec4(tf8.xyzx).xyz, vec4(tf8.xyzx).xyz)).w;
 //tf9.xyz = vec4(inversesqrt(tf2.wwww)).xyz;
 //tf8.xyz = vec4(tf8.xyzx * tf9.xyzx).xyz;
-
 tf8.xyz = normalize(viewDir);
 
 
@@ -147,7 +146,6 @@ tf9.xyz = vec4(-tf8.xyzx).xyz;
 
 // 曲面率 dot(view, normal)
 tf2.w = vec4(dot(vec4(tf9.xyzx).xyz, vec4(tf0.xyzx).xyz)).w;
-
 
 tf9.xyz = vec4(tf2.wwww + tf2.wwww).xyz;
 tf9.xyz = vec4(-tf9.xyzx).xyz;
@@ -213,7 +211,7 @@ tf2.w = saturate(dot(normal, viewDir));
 // NoL
 tf8.xyz = saturate(dot(normal, lightDir));
 
-// tf6 HalfDir
+// tf6 HalfDir  tf0 normalw
 //tf0.x = vec4(dot(vec4(tf0.xyzx).xyz, vec4(tf6.xyzx).xyz)).x;
 //tf0.x = vec4(max(vec4(tf0.x), vec4(0))).x;
 //tf0.x = vec4(min(vec4(tf0.x), vec4(1.00000))).x;
@@ -452,7 +450,7 @@ tf0.w = 1 - pow(gloss, 4);
 
 // NoH
 tf0.x = vec4(tf0.x * tf0.x).x;
-
+pow(NoH, 2);
 
 tf0.x = vec4(tf0.w * tf0.x).x;
 tf0.x = vec4(tf0.x + 1.00000).x;
@@ -492,6 +490,8 @@ tf1.x = vec4(tf0.y * tf1.x).x;
 tf0.y = vec4(tf0.y * tf1.x).y;
 tf0.y = vec4(tf0.y + 0.500000).y;
 tf0.y = vec4(tf0.y + -1.00000).y;
+
+tf0.y + 0.5 - 1.0;
 
 
 // tf1.x = vec4(-tf8.z).x;

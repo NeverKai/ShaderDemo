@@ -121,9 +121,7 @@ tf1.xyz = vec4(tf1.xyzx + __WorldSpaceCameraPos.xyzx).xyz;
 tf0.w = vec4(dot(vec4(tf1.xyzx).xyz, vec4(tf1.xyzx).xyz)).w;
 tf3.xyz = vec4(inversesqrt(tf0.wwww)).xyz;
 tf3.xyz = vec4(tf3.xyzx).xyz;
-tf3.xyz = vec4(tf3.xyzx).xyz;
 tf1.xyz = vec4(tf1.xyzx * tf3.xyzx).xyz;
-
 
 // saturate viewDir
 tf0.w = vec4(dot(vec4(tf0.xyzx).xyz, vec4(tf0.xyzx).xyz)).w;
@@ -145,15 +143,15 @@ ti0.y = (float(tf0.w) >= float(0.250000)) ? -1 : 0;
 
 
 
-tf0.z = vec4(-__LightThreshold).z;
-tf0.z = vec4(tf0.z + 1.00000).z;
-tf0.w = vec4(-__TransitionRange).w;
-tf0.w = vec4(tf0.w + tf0.z).w;
-
+tf0.z = vec4(-__LightThreshold + 1.00000).z;
+tf0.w = vec4(-__TransitionRange + tf0.z).w;
+tf0.w = 1 - __LightThreshold - __TransitionRange;
 
 tf0.z = vec4(tf0.z + __TransitionRange).z;
 tf1.x = vec4(-tf0.w).x;
 tf0.z = vec4(tf0.z + tf1.x).z;
+(b - a)
+
 tf0.w = vec4(-tf0.w).w;
 tf0.w = vec4(tf0.x + tf0.w).w;
 tf0.x = vec4(tf0.x * __TransitionIntensity).x;
@@ -168,9 +166,14 @@ tf0.z = vec4(tf0.z * tf0.w).z;
 tf0.x = vec4(tf0.x + tf0.z).x;
 tf0.x = vec4(max(vec4(tf0.x), vec4(0))).x;
 tf1.y = vec4(min(vec4(tf0.x), vec4(1.00000))).y;
+
+smoothstep(tf0.w, tf0.z + __TransitionRange, )
+
+
 tf0.x = vec4(tf1.y + __RimThreshold).x;
 tf0.x = vec4(max(vec4(tf0.x), vec4(0))).x;
 tf1.x = vec4(min(vec4(tf0.x), vec4(1.00000))).x;
+
 tf0.xz = vec4(-tf1.xxyx).xz;
 tf0.xz = vec4(tf0.xxzx + vec4(1.00000, 0, 1.00000, 0)).xz;
 tf0.x = vec4(tf0.x * 0.250000).x;
@@ -185,23 +188,20 @@ ti0.x = ivec4(ti0.x).x;
 }
 ti0.x = ivec4(ti0.x).x;
 
-tf1.xzw = vec4(__ShadowIntensity).xzw;
-tf1.xzw = vec4(tf1.xxzw).xzw;
-tf3.xyz = vec4(tf1.xzwx * __MainLightColor.xyzx).xyz;
-
-
-tf3.w = vec4(__ShadowIntensity).w;
-tf3.xyzw = vec4(tf3.xyzw * vec4(0.300000, 0.300000, 0.300000, 0.300000)).xyzw;
-tf4.xyzw = vec4(-__HighlightColor.xyzw).xyzw;
-tf4.xyzw = vec4(tf4.xyzw + __ShadowColor.xyzw).xyzw;
-tf5.xyzw = vec4(tf3.xyzw * tf4.xyzw).xyzw;
-tf5.xyzw = vec4(tf5.xyzw + __HighlightColor.xyzw).xyzw;
-tf3.xyzw = vec4(tf3.xyzw * tf4.xyzw).xyzw;
-
+//tf1.xzw = vec4(__ShadowIntensity).xzw;
+//tf1.xzw = vec4(tf1.xxzw).xzw;
+//tf3.xyz = vec4(tf1.xzwx * __MainLightColor.xyzx).xyz;
+//tf3.w = vec4(__ShadowIntensity).w;
+//tf3.xyzw = vec4(tf3.xyzw * vec4(0.300000, 0.300000, 0.300000, 0.300000)).xyzw;
+//tf4.xyzw = vec4(-__HighlightColor.xyzw).xyzw;
+//tf4.xyzw = vec4(tf4.xyzw + __ShadowColor.xyzw).xyzw;
+//tf5.xyzw = vec4(tf3.xyzw * tf4.xyzw).xyzw;
+//tf5.xyzw = vec4(tf5.xyzw + __HighlightColor.xyzw).xyzw;
+//tf3.xyzw = vec4(tf3.xyzw * tf4.xyzw).xyzw;
+tf3.xyzw = lerp(__HighlightColor, __ShadowColor, __ShadowIntensity*__MainLightColor*0.3);
 
 
 tf4.xyzw = vec4(texture(textures2D[0]_samplers2D[0], vec4(i_REGISTER5.xyxx).xy).xyzw).xyzw;
-tf4.xyzw = vec4(tf4.xyzw).xyzw;
 tf5.xyzw = vec4(tf4.xyzw * tf5.xyzw).xyzw;
 tf1.xyzw = vec4(tf1.yyyy * tf5.xyzw).xyzw;
 
@@ -248,8 +248,6 @@ tf2.x = vec4(min(vec4(tf2.x), vec4(1.00000))).x;
 
 tf2.x = vec4(tf2.x + -0.620000).x;
 tf2.x = vec4(tf2.x * 2.63158).x;
-
-
 tf2.x = vec4(max(vec4(tf2.x), vec4(0))).x;
 tf2.y = vec4(tf2.x * -2.00000).y;
 tf2.y = vec4(tf2.y + 3.00000).y;
@@ -257,15 +255,14 @@ tf2.x = vec4(tf2.x * tf2.x).x;
 tf2.y = vec4(-tf2.y).y;
 tf2.x = vec4(tf2.x * tf2.y).x;
 tf2.x = vec4(tf2.x + 1.00000).x;
-tf2.y = vec4(-tf2.x).y;
-tf2.y = vec4(tf2.y + 1.00000).y;
+tf2.y = vec4(-tf2.x + 1.00000).y;
 
 
 tf0.xyzw = vec4(tf0.xyzw * tf2.yyyy).xyzw;
 tf1.xyzw = vec4(tf1.xyzw * tf2.xxxx).xyzw;
+
 tf0.xyzw = vec4(tf0.xyzw + tf1.xyzw).xyzw;
-tf0.xyzw = vec4(tf0.xyzw).xyzw;
-tf0.xyzw = vec4(tf0.xyzw).xyzw;
+
 o_REGISTER0.xyzw = vec4(tf0.xyzw).xyzw;
 v_SV_TARGET0.xyzw = o_REGISTER0.xyzw;
 return;
