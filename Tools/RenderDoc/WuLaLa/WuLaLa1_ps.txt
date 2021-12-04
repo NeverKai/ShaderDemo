@@ -155,6 +155,9 @@ tf0.z = vec4(tf0.z + tf1.x).z;
 tf0.w = vec4(-tf0.w).w;
 tf0.w = vec4(tf0.x + tf0.w).w;
 tf0.x = vec4(tf0.x * __TransitionIntensity).x;
+
+tf0.x = x-a
+
 tf0.z = vec4(1.00000 / tf0.z).z;
 tf0.z = vec4(tf0.w * tf0.z).z;
 tf0.z = vec4(max(vec4(tf0.z), vec4(0))).z;
@@ -167,7 +170,8 @@ tf0.x = vec4(tf0.x + tf0.z).x;
 tf0.x = vec4(max(vec4(tf0.x), vec4(0))).x;
 tf1.y = vec4(min(vec4(tf0.x), vec4(1.00000))).y;
 
-smoothstep(tf0.w, tf0.z + __TransitionRange, )
+tf0.w : NdV
+tf1.y = smoothstep(tf0.w, tf0.z + __TransitionRange, )
 
 
 tf0.x = vec4(tf1.y + __RimThreshold).x;
@@ -226,11 +230,21 @@ tf3.xyzw = vec4(tf0.zzzz * tf3.xyzw).xyzw;
 
 tf1.xyzw = vec4(tf1.xyzw + tf3.xyzw).xyzw;
 tf1.xyzw = vec4(tf1.xyzw * __Color.xyzw).xyzw;
+
+
 tf1.xyzw = vec4(tf1.xyzw * vec4(0.700000, 0.700000, 0.700000, 0.700000)).xyzw;
 tf3.xyzw = vec4(__EmissionColor.xyzw + vec4(2.00000, 2.00000, 2.00000, 2.00000)).xyzw;
+
+
+
 tf1.xyzw = vec4(tf1.xyzw * tf3.xyzw).xyzw;
 tf0.xyzw = vec4(ti0.xxxx + tf1.xyzw).xyzw;
 tf0.xyzw = vec4(tf0.xyzw * tf5.xyzw).xyzw;
+
+
+
+
+
 
 tf2.xyz = vec4(tf2.xyzx).xyz;
 tf2.w = vec4(1.00000).w;
@@ -240,12 +254,9 @@ tf2.w = vec4(tf2.w + 1.00000).w;
 tf3.xyzw = vec4(tf0.xyzw * tf2.wwww).xyzw;
 tf1.xyzw = vec4(tf1.xyzw * _GlobalSoFunnyParam.xxxx).xyzw;
 tf1.xyzw = vec4(tf3.xyzw + tf1.xyzw).xyzw;
-
-
 tf2.x = vec4(dot(vec4(tf2.xyzx).xyz, vec4(vec4(0.333000, 0.333000, 0.333000, 0)).xyz)).x;
 tf2.x = vec4(max(vec4(tf2.x), vec4(0))).x;
 tf2.x = vec4(min(vec4(tf2.x), vec4(1.00000))).x;
-
 tf2.x = vec4(tf2.x + -0.620000).x;
 tf2.x = vec4(tf2.x * 2.63158).x;
 tf2.x = vec4(max(vec4(tf2.x), vec4(0))).x;
@@ -254,14 +265,13 @@ tf2.y = vec4(tf2.y + 3.00000).y;
 tf2.x = vec4(tf2.x * tf2.x).x;
 tf2.y = vec4(-tf2.y).y;
 tf2.x = vec4(tf2.x * tf2.y).x;
+
+
 tf2.x = vec4(tf2.x + 1.00000).x;
 tf2.y = vec4(-tf2.x + 1.00000).y;
 
 
-tf0.xyzw = vec4(tf0.xyzw * tf2.yyyy).xyzw;
-tf1.xyzw = vec4(tf1.xyzw * tf2.xxxx).xyzw;
-
-tf0.xyzw = vec4(tf0.xyzw + tf1.xyzw).xyzw;
+tf0.xyzw = vec4((tf0.xyzw * tf2.yyyy).xyzw + vec4(tf1.xyzw * tf2.xxxx).xyzw).xyzw;
 
 o_REGISTER0.xyzw = vec4(tf0.xyzw).xyzw;
 v_SV_TARGET0.xyzw = o_REGISTER0.xyzw;
