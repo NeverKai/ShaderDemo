@@ -17,61 +17,18 @@ vec3 __WorldSpaceCameraPos;
 
 layout(binding=2) uniform UnityPerMaterial
 {
-vec4 __MainTex_ST;
-vec4 __ThirTexColor;
-float __ThirdTexAddMode;
-float __FlowSpeedX;
-float __FlowSpeedY;
-float __ShiningBrightness;
-float __ShiningStrength;
-float __ShiningSpeed;
-vec4 __FourthTexColor;
-float __FourthTexBrightness;
-vec4 __RimColor;
-vec4 __SPRimColor;
 float __LightThreshold;
-float __SPRimShiningBaseBrightness;
-float __SPRimAddStrength;
-float __SPRimShiningStrength;
-float __SPRimShiningSpeed;
-float __SpecularRange;
-float __SpecularTransitionRange;
 float __RimThreshold;
-float __FPower;
-float __F0;
-float __SPRimThreshold;
-float __SPFPower;
-float __SPF0;
-vec4 __RainEffectTexture_ST;
-vec4 __RainWarpTexture_ST;
-float __RainSmoothness;
-float __RainTexTilling;
-float __RainMaskTilling;
-float __RainWarpSpeed;
-float __RainEffectSpeed;
-float __RainMaskSpeed;
-vec4 __RainLightDir;
-float __WarpIntensity;
-float __DissolveValue;
+
+
 vec4 __Color;
-vec4 __SpecularColor;
 vec4 __HighlightColor;
 vec4 __ShadowColor;
 vec4 __EmissionColor;
 float __ShadowIntensity;
 float __TransitionRange;
 float __TransitionIntensity;
-vec4 __RampColor;
-vec4 __MaskTex_ST;
-float __RampSaturation;
-float __RampStrength;
-float __RampBrightness;
-float __RampGloss;
-float __RampGlossPower;
-float __RampScale;
-float __ToonSpecThreshold;
-float __ToonSpecStrength;
-float __ToonSpecTransitionRange;
+
 vec4 _GlobalSoFunnyParam;
 };
 
