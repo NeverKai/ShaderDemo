@@ -65,6 +65,12 @@
             float4 _LightMapTex_ST, _RampTex_ST, _MaskTex_ST, _Color, _SpecularColor, _unity_OcclusionMaskSelector;
             float _Metallic, _Glossiness;
 
+            // half3 FresnelTerm (half3 F0, half cosA)
+            // {
+            //  half t = Pow5 (1 - cosA);   // ala Schlick interpoliation
+            //   return F0 + (1-F0) * t;
+            //}
+
             v2f vert (appdata v)
             {
                 v2f o;
@@ -96,9 +102,12 @@
                 fixed3 viewDir = normalize(_WorldSpaceCameraPos.xyz - i.vertex);
                 fixed3 worldNormal = normalize(i.worldNormal);
 
+                fixed3 halfDir = (lightDir + viewDir);
+
+                fixed3 LDotH = saturate(dot(lightDir, halfDir));
 
                 // 高光
-                fixed NoH = saturate(dot(worldNormal, (lightDir + viewDir)));
+                fixed NoH = saturate(dot(worldNormal, halfDir));
                 fixed spec = pow(NoH, 5);
 
                 fixed3 specColor = saturate(spec * _SpecularColor);
@@ -118,7 +127,8 @@
 
                 fixed3 frenelColor = rampColor + (value - rampColor) * pow1;
 
-
+                fixed3 tempColor =  1 - rampColor;
+                rampColor =  pow(1 - LDotH, 5) * tempColor + rampColor;
 
                  // 基础色
                 fixed3 lightMapColor = tex2D(_LightMapTex, i.uv2).xyz;

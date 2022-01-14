@@ -474,8 +474,9 @@ tf0.w = pow(1 - LoH, 5)
 
 // (1 - LoH)(1 - ramp) = 1 -ramp - LoH + LoH * ramp
 tf7.xyz = vec4(tf0.wwww * tf7.xyzx).xyz;
-
 tf3.xyz = vec4(tf3.xyzx + tf7.xyzx).xyz;
+
+
 tf0.xzw = vec4(tf0.zzzz * tf0.xxxx).xzw;
 tf0.xzw = vec4(tf0.xxzw).xzw;
 tf0.xzw = vec4(tf0.xxzw * tf3.xxyz).xzw;
