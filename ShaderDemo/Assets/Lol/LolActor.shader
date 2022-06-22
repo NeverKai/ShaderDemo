@@ -3,12 +3,15 @@
     Properties
     {
         _MainTex ("Albedo", 2D) = "white" {}
-
+        _Color("Color", 2D) = "white" {}
         _BumpScale("Scale", Float) = 1.0
         [Normal] _BumpMap("Normal Map", 2D) = "bump" {}
         
         [Gamma] _Metallic("Metallic", Range(0.0, 1.0)) = 0.0
         _MetallicGlossMap("Metallic", 2D) = "white" {}
+        
+        
+        _Mode("_mode", Float) = 0.0
     }
     SubShader
     {
@@ -22,6 +25,8 @@
             #pragma fragment frag
             // make fog work
             #pragma multi_compile_fog
+            
+            #pragma shader_feature_local _MetallicGlossMap
 
             #include "UnityCG.cginc"
             struct appdata
@@ -57,9 +62,19 @@
                 fixed2 bumpOffset = normalMap.xy * _BumpScale;
 
                 fixed3 mainColor = tex2D(_MainTex, i.uv);
-                return fixed4(mainColor.rgb, 1);
+                
+                fixed2 metallicGloss;
+                fixed sss;
+
+                fixed3 mg = tex2D(_MetallicGlossMap, i.uv);
+                metallicGloss = mg.rg;
+                sss = mg.b;
+                
+                return fixed4(metallicGloss.r, 0, 0, 1);
             }
             ENDCG
         }
     }
+    
+    // CustomEditor "StandardShaderGUI"
 }

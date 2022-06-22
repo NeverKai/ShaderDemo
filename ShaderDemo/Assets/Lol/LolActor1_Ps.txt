@@ -63,13 +63,12 @@ tf2.xyz = vec4(i_REGISTER4.xyzx).xyz;
 tf3.xyz = vec4(i_REGISTER5.xyzx).xyz;
 tf4.xyz = vec4(i_REGISTER6.xyzx).xyz;
 
-
+// 采样法线  i_REGISTER2 法线uv
 tf5.xyz = vec4(texture(textures2D[0]_samplers2D[0], vec4(i_REGISTER2.xyxx).xy).xyzw).xyz;
 tf5.xyz = vec4(tf5.xyzx).xyz;
-tf5.xyz = vec4(tf5.xyzx).xyz;
+
 tf5.xyz = vec4(tf5.xyzx * vec4(2.00000, 2.00000, 2.00000, 0)).xyz;
 tf5.xyz = vec4(tf5.xyzx + vec4(-1.00000, -1.00000, -1.00000, 0)).xyz;
-
 
 tf6.x = vec4(__BumpScale).x;
 tf6.y = vec4(__BumpScale).y;
@@ -124,7 +123,7 @@ tf2.zw = vec4(-tf0.xxxy).zw;
 tf2.zw = vec4(tf2.zzzw + tf2.xxxy).zw;
 tf2.xy = vec4(tf2.xyxx).xy;
 
-
+// MetallicGlossMap uv
 tf3.xyzw = vec4(texture(textures2D[1]_samplers2D[1], vec4(tf2.xyxx).xy).xyzw).xyzw;
 tf3.xyzw = vec4(tf3.xyzw).xyzw;
 tf3.xyzw = vec4(tf3.xyzw * __Color.xyzw).xyzw;
@@ -135,7 +134,7 @@ tf2.xy = vec4(tf2.zwzz * tf2.xyxx).xy;
 tf0.xy = vec4(tf0.xyxx + tf2.xyxx).xy;
 tf0.xy = vec4(tf0.xyxx).xy;
 
-
+/// Occlutionmap uv
 tf0.xy = vec4(texture(textures2D[2]_samplers2D[2], vec4(tf0.xyxx).xy).xyzw).xy;
 tf0.xy = vec4(tf0.xyxx).xy;
 tf0.xy = vec4(tf0.xyxx).xy;

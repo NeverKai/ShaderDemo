@@ -177,6 +177,8 @@ gl_Position.xyzw = o_REGISTER0.xyzw;
 
 
 v_TEXCOORD5In.xyzw = o_REGISTER1.xyzw;
+
+// uv
 v_TEXCOORD0In.xyzw = o_REGISTER2.xyzw;
 v_TEXCOORD1In.xyzw = o_REGISTER3.xyzw;
 v_TEXCOORD2In.xyzw = o_REGISTER4.xyzw;
