@@ -1,0 +1,308 @@
+#version 430
+
+smooth in vec4 v_TEXCOORD5;
+smooth in vec4 v_TEXCOORD0;
+smooth in vec4 v_TEXCOORD1;
+smooth in vec4 v_TEXCOORD2;
+smooth in vec4 v_TEXCOORD3;
+smooth in vec4 v_TEXCOORD4;
+
+layout(location=0) out vec4 v_SV_TARGET0;
+
+layout(binding=0) uniform $Globals
+{
+vec4 __WorldSpaceLightPos0;
+vec4 __LightColor0;
+vec4 __AmbientCol;
+float __BumpScale;
+vec4 __MainTex_ST;
+vec4 __Color;
+float __Metallic;
+vec4 __SecondarySpecularColor;
+vec4 __PrimarySpecularColor;
+float __PrimarySpecularExponent;
+float __PrimarySpecularShift;
+float __SecondarySpecularExponent;
+float __SecondarySpecularShift;
+};
+
+uniform sampler2D textures2D[0]_samplers2D[0];
+uniform sampler2D textures2D[1]_samplers2D[1];
+uniform sampler2D textures2D[2]_samplers2D[2];
+uniform sampler2D textures2D[3]_samplers2D[3];
+
+void main()
+{
+vec4 i_REGISTER2;
+vec4 i_REGISTER3;
+vec4 i_REGISTER4;
+vec4 i_REGISTER5;
+vec4 i_REGISTER6;
+i_REGISTER2.xyzw = v_TEXCOORD0.xyzw;
+i_REGISTER3.xyzw = v_TEXCOORD1.xyzw;
+i_REGISTER4.xyzw = v_TEXCOORD2.xyzw;
+i_REGISTER5.xyzw = v_TEXCOORD3.xyzw;
+i_REGISTER6.xyz = v_TEXCOORD4.xyz;
+
+vec4 o_REGISTER0;
+
+vec4 tf0;
+ivec4 ti0;
+vec4 tf1;
+ivec4 ti1;
+vec4 tf2;
+ivec4 ti2;
+vec4 tf3;
+ivec4 ti3;
+vec4 tf4;
+ivec4 ti4;
+vec4 tf5;
+ivec4 ti5;
+vec4 tf6;
+ivec4 ti6;
+vec4 tf7;
+ivec4 ti7;
+vec4 tf8;
+ivec4 ti8;
+ivec4 iTempX[2];
+uvec4 uTempX[2];
+
+tf0.xy = vec4(i_REGISTER2.xyxx).xy;
+tf1.xyz = vec4(i_REGISTER3.xyzx).xyz;
+tf2.xyz = vec4(i_REGISTER4.xyzx).xyz;
+tf3.xyz = vec4(i_REGISTER5.xyzx).xyz;
+tf4.xyz = vec4(i_REGISTER6.xyzx).xyz;
+
+normalized(tf4);
+tf0.z = vec4(dot(vec4(tf4.xyzx).xyz, vec4(tf4.xyzx).xyz)).z;
+tf0.z = vec4(max(vec4(tf0.z), vec4(0.00100000))).z;
+tf0.z = vec4(inversesqrt(tf0.z)).z;
+
+
+tf0.w = vec4(dot(vec4(__WorldSpaceLightPos0.xyzx).xyz, vec4(__WorldSpaceLightPos0.xyzx).xyz)).w;
+tf0.w = vec4(max(vec4(tf0.w), vec4(0.00100000))).w;
+tf0.w = vec4(inversesqrt(tf0.w)).w;
+tf5.xyz = vec4(tf0.wwww * __WorldSpaceLightPos0.xyzx).xyz;
+
+tf4.xyz = vec4(tf0.zzzz * tf4.xyzx).xyz;
+tf4.xyz = vec4(tf5.xyzx + tf4.xyzx).xyz;
+
+tf0.z = vec4(dot(vec4(tf4.xyzx).xyz, vec4(tf4.xyzx).xyz)).z;
+tf0.z = vec4(max(vec4(tf0.z), vec4(0.00100000))).z;
+tf0.z = vec4(inversesqrt(tf0.z)).z;
+tf4.xyz = vec4(tf4.xyzx * tf0.zzzz).xyz;
+
+
+// matcap
+tf6.xyz = vec4(texture(textures2D[2]_samplers2D[2], vec4(i_REGISTER2.xyxx).xy).xyzw).xyz;
+tf6.xyz = vec4(tf6.xyzx).xyz;
+tf6.xyz = vec4(tf6.xyzx).xyz;
+tf6.xyz = vec4(tf6.xyzx * vec4(2.00000, 2.00000, 2.00000, 0)).xyz;
+tf6.xyz = vec4(tf6.xyzx + vec4(-1.00000, -1.00000, -1.00000, 0)).xyz;
+
+tf7.xyz = vec4(tf2.xyzx * tf6.yyyy).xyz;
+tf6.xyw = vec4(tf1.xyxz * tf6.xxxx).xyw;
+tf6.xyw = vec4(tf7.xyxz + tf6.xyxw).xyw;
+tf7.xyz = vec4(tf3.xyzx * tf6.zzzz).xyz;
+tf6.xyz = vec4(tf6.xywx + tf7.xyzx).xyz;
+
+tf0.z = vec4(dot(vec4(tf6.xyzx).xyz, vec4(tf6.xyzx).xyz)).z;
+tf0.z = vec4(inversesqrt(tf0.z)).z;
+tf6.xyz = vec4(tf6.xyzx * tf0.zzzz).xyz;
+
+
+// 法线贴图
+tf7.xyz = vec4(texture(textures2D[0]_samplers2D[0], vec4(i_REGISTER2.xyxx).xy).xyzw).xyz;
+
+tf7.xyz = vec4(tf7.xyzx * vec4(2.00000, 2.00000, 2.00000, 0)).xyz;
+tf7.xyz = vec4(tf7.xyzx + vec4(-1.00000, -1.00000, -1.00000, 0)).xyz;
+
+
+tf8.x = vec4(__BumpScale).x;
+tf8.y = vec4(__BumpScale).y;
+tf8.xy = vec4(tf8.xyxx).xy;
+tf0.zw = vec4(tf7.xxxy * tf8.xxxy).zw;
+
+tf2.xyz = vec4(tf2.xyzx * tf0.wwww).xyz;
+tf1.xyz = vec4(tf0.zzzz * tf1.xyzx).xyz;
+tf1.xyz = vec4(tf2.xyzx + tf1.xyzx).xyz;
+tf2.xyz = vec4(tf3.xyzx * tf7.zzzz).xyz;
+tf1.xyz = vec4(tf1.xyzx + tf2.xyzx).xyz;
+
+normalized(tf1);
+tf0.z = vec4(dot(vec4(tf1.xyzx).xyz, vec4(tf1.xyzx).xyz)).z;
+tf0.z = vec4(inversesqrt(tf0.z)).z;
+tf1.xyz = vec4(tf1.xyzx * tf0.zzzz).xyz;
+
+
+// occlusion g通道 G:阴影(额外做的阴影图，乘以ShadowMap当最终阴影)
+tf0.zw = vec4(texture(textures2D[3]_samplers2D[3], vec4(i_REGISTER2.xyxx).xy).zwxy).zw;
+tf0.zw = vec4(tf0.zzzw).zw;
+tf0.zw = vec4(tf0.zzzw).zw;
+
+tf2.x = vec4(__PrimarySpecularShift).x;
+tf2.y = vec4(__SecondarySpecularShift).y;
+tf2.xy = vec4(tf0.zzzz + tf2.xyxx).xy;
+
+
+tf2.xzw = vec4(tf1.xxyz * tf2.xxxx).xzw;
+tf2.xzw = vec4(tf6.xxyz + tf2.xxzw).xzw;
+tf3.xyz = vec4(tf1.xyzx * tf2.yyyy).xyz;
+tf3.xyz = vec4(tf6.xyzx + tf3.xyzx).xyz;
+
+
+tf0.z = vec4(dot(vec4(tf1.xyzx).xyz, vec4(tf5.xyzx).xyz)).z;
+tf0.z = vec4(max(vec4(tf0.z), vec4(0))).z;
+tf1.xyz = vec4(min(vec4(tf0.zzzz), vec4(vec4(1.00000, 1.00000, 1.00000, 0)))).xyz;
+tf1.xyz = vec4(tf1.xyzx).xyz;
+tf1.xyz = vec4(tf1.xyzx).xyz;
+tf1.xyz = vec4(tf1.xyzx * __LightColor0.xyzx).xyz;
+tf0.z = vec4(dot(vec4(tf2.xzwx).xyz, vec4(tf2.xzwx).xyz)).z;
+tf5.xyz = vec4(inversesqrt(tf0.zzzz)).xyz;
+tf5.xyz = vec4(tf5.xyzx).xyz;
+tf5.xyz = vec4(tf5.xyzx).xyz;
+tf2.xyz = vec4(tf2.xzwx * tf5.xyzx).xyz;
+tf0.z = vec4(dot(vec4(tf2.xyzx).xyz, vec4(tf4.xyzx).xyz)).z;
+tf1.w = vec4(-tf0.z).w;
+tf1.w = vec4(tf0.z * tf1.w).w;
+tf1.w = vec4(tf1.w + 1.00000).w;
+tf0.z = vec4(tf0.z + 1.00000).z;
+tf0.z = vec4(max(vec4(tf0.z), vec4(0))).z;
+tf0.z = vec4(min(vec4(tf0.z), vec4(1.00000))).z;
+tf1.w = vec4(sqrt(tf1.w)).w;
+tf1.w = vec4(log2(tf1.w)).w;
+tf1.w = vec4(tf1.w * __PrimarySpecularExponent).w;
+tf1.w = vec4(exp2(tf1.w)).w;
+tf2.x = vec4(tf0.z * -2.00000).x;
+tf2.x = vec4(tf2.x + 3.00000).x;
+tf0.z = vec4(tf0.z * tf0.z).z;
+tf0.z = vec4(tf2.x * tf0.z).z;
+tf0.z = vec4(tf0.z * tf1.w).z;
+tf2.xyz = vec4(tf0.zzzz * __PrimarySpecularColor.xyzx).xyz;
+tf0.z = vec4(dot(vec4(tf3.xyzx).xyz, vec4(tf3.xyzx).xyz)).z;
+tf5.xyz = vec4(inversesqrt(tf0.zzzz)).xyz;
+tf5.xyz = vec4(tf5.xyzx).xyz;
+tf5.xyz = vec4(tf5.xyzx).xyz;
+tf3.xyz = vec4(tf3.xyzx * tf5.xyzx).xyz;
+tf0.z = vec4(dot(vec4(tf3.xyzx).xyz, vec4(tf4.xyzx).xyz)).z;
+tf1.w = vec4(tf0.z + 1.00000).w;
+tf1.w = vec4(max(vec4(tf1.w), vec4(0))).w;
+tf1.w = vec4(min(vec4(tf1.w), vec4(1.00000))).w;
+tf2.w = vec4(-tf0.z).w;
+tf0.z = vec4(tf0.z * tf2.w).z;
+tf0.z = vec4(tf0.z + 1.00000).z;
+tf0.z = vec4(sqrt(tf0.z)).z;
+tf0.z = vec4(log2(tf0.z)).z;
+tf0.z = vec4(tf0.z * __SecondarySpecularExponent).z;
+tf0.z = vec4(exp2(tf0.z)).z;
+tf2.w = vec4(tf1.w * -2.00000).w;
+tf2.w = vec4(tf2.w + 3.00000).w;
+tf1.w = vec4(tf1.w * tf1.w).w;
+tf1.w = vec4(tf2.w * tf1.w).w;
+tf3.xyz = vec4(tf0.zzzz * tf1.wwww).xyz;
+tf3.xyz = vec4(tf3.xyzx).xyz;
+tf3.xyz = vec4(tf3.xyzx).xyz;
+tf3.xyz = vec4(tf3.xyzx * __SecondarySpecularColor.xyzx).xyz;
+tf2.xyz = vec4(tf2.xyzx + tf3.xyzx).xyz;
+tf2.xyz = vec4(tf0.wwww * tf2.xyzx).xyz;
+tf2.xyz = vec4(tf2.xyzx + vec4(-0.000100000, -0.000100000, -0.000100000, 0)).xyz;
+tf2.xyz = vec4(max(vec4(tf2.xyzx), vec4(vec4(0, 0, 0, 0)))).xyz;
+tf2.xyz = vec4(min(vec4(tf2.xyzx), vec4(vec4(100.000, 100.000, 100.000, 0)))).xyz;
+tf0.xy = vec4(tf0.xyxx * __MainTex_ST.xyxx).xy;
+tf0.xy = vec4(tf0.xyxx + __MainTex_ST.zwzz).xy;
+tf0.xy = vec4(tf0.xyxx).xy;
+
+
+// albedo
+tf0.xyzw = vec4(texture(textures2D[1]_samplers2D[1], vec4(tf0.xyxx).xy).xyzw).xyzw;
+tf0.xyzw = vec4(tf0.xyzw * __Color.xyzw).xyzw;
+
+tf3.xyz = vec4(tf0.xyzx * vec4(0.305306, 0.305306, 0.305306, 0)).xyz;
+tf3.xyz = vec4(tf3.xyzx + vec4(0.682171, 0.682171, 0.682171, 0)).xyz;
+
+tf3.xyz = vec4(tf0.xyzx * tf3.xyzx).xyz;
+
+tf3.xyz = vec4(tf3.xyzx + vec4(0.0125229, 0.0125229, 0.0125229, 0)).xyz;
+tf3.xyz = vec4(tf0.xyzx * tf3.xyzx).xyz;
+
+
+//tf1.w = vec4(-__Metallic).w;
+//tf1.w = vec4(tf1.w + 1.00000).w;
+//tf4.xyz = vec4(tf1.wwww * vec4(0.960000, 0.960000, 0.960000, 0)).xyz;
+(1 - __Metallic) * 0.96
+
+tf5.xyz = vec4(tf4.zzzz).xyz;
+tf5.xyz = vec4(tf5.xyzx).xyz;
+
+tf5.xyz = vec4(tf3.xyzx * tf5.xyzx).xyz;
+tf2.xyz = vec4(tf2.xyzx + tf5.xyzx).xyz;
+tf4.xyz = vec4(tf4.xyzx).xyz;
+
+// abeldo * smooth * __AmbientCol
+tf3.xyz = vec4(tf3.xyzx * tf4.xyzx).xyz;
+tf3.xyz = vec4(tf3.xyzx * __AmbientCol.xyzx).xyz;
+
+
+tf1.xyz = vec4(tf1.xyzx * tf2.xyzx).xyz;
+tf1.xyz = vec4(tf3.xyzx + tf1.xyzx).xyz;
+tf1.xyz = vec4(max(vec4(tf1.xyzx), vec4(vec4(0, 0, 0, 0)))).xyz;
+tf1.xyz = vec4(log2(tf1.xyzx)).xyz;
+tf1.xyz = vec4(tf1.xyzx * vec4(0.416667, 0.416667, 0.416667, 0)).xyz;
+tf1.xyz = vec4(exp2(tf1.xyzx)).xyz;
+tf1.xyz = vec4(tf1.xyzx * vec4(1.05500, 1.05500, 1.05500, 0)).xyz;
+tf1.xyz = vec4(tf1.xyzx + vec4(-0.0550000, -0.0550000, -0.0550000, 0)).xyz;
+
+
+tf0.xyz = vec4(max(vec4(tf1.xyzx), vec4(vec4(0, 0, 0, 0)))).xyz;
+tf0.w = vec4(tf0.w).w;
+o_REGISTER0.xyzw = vec4(tf0.xyzw).xyzw;
+v_SV_TARGET0.xyzw = o_REGISTER0.xyzw;
+return;
+
+}
+
+Input:
+        SV_Position0
+        TEXCOORD5
+        TEXCOORD0
+        TEXCOORD1
+        TEXCOORD2
+        TEXCOORD3
+        TEXCOORD4
+
+Output:
+        SV_TARGET0
+
+CBuffer 0:
+        __WorldSpaceLightPos0 USED
+        __LightColor0 USED
+        __AmbientCol USED
+        __BumpScale USED
+        __MainTex_ST USED
+        __Color USED
+        __Metallic USED
+        __SecondarySpecularColor USED
+        __PrimarySpecularColor USED
+        __PrimarySpecularExponent USED
+        __PrimarySpecularShift USED
+        __SecondarySpecularExponent USED
+        __SecondarySpecularShift USED
+
+Resource:
+        samplers2D[0] : 0 USED
+        samplers2D[1] : 1 USED
+        samplers2D[2] : 2 USED
+        samplers2D[3] : 3 USED
+        textures2D[0] : 0 USED
+        textures2D[1] : 1 USED
+        textures2D[2] : 2 USED
+        textures2D[3] : 3 USED
+        $Globals : 0 USED
+
+
+
+可能有kajiya-kay头发
+
+
+可能有matcap
+    需要转view空间

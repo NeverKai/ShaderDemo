@@ -3,7 +3,7 @@
     Properties
     {
         _MainTex ("Albedo", 2D) = "white" {}
-        _Color("Color", 2D) = "white" {}
+        _Color("Color", Color) = (1,1,1,1)
         _BumpScale("Scale", Float) = 1.0
         [Normal] _BumpMap("Normal Map", 2D) = "bump" {}
         
@@ -41,8 +41,8 @@
                 float4 vertex : SV_POSITION;
             };
 
-            sampler2D _MainTex, _BumpMap;
-            float4 _MainTex_ST, _LightColor0;
+            sampler2D _MainTex, _BumpMap, _MetallicGlossMap;
+            float4 _MainTex_ST, _LightColor0, _Color;
             float _BumpScale;
             
             v2f vert (appdata v)
@@ -54,6 +54,15 @@
                 return o;
             }
 
+            // UnityLight MainLight ()
+            // {
+            //     UnityLight l;
+            //
+            //     l.color = _LightColor0.rgb;
+            //     l.dir = _WorldSpaceLightPos0.xyz;
+            //     return l;
+            // }
+
             fixed4 frag (v2f i) : SV_Target
             {
                 fixed3 normalMap = tex2D(_BumpMap, i.uv);
@@ -62,15 +71,21 @@
                 fixed2 bumpOffset = normalMap.xy * _BumpScale;
 
                 fixed3 mainColor = tex2D(_MainTex, i.uv);
+                half3 albedo = _Color.rgb * mainColor;
                 
                 fixed2 metallicGloss;
                 fixed sss;
 
+                /// r 为金属度，g为smoothness
                 fixed3 mg = tex2D(_MetallicGlossMap, i.uv);
                 metallicGloss = mg.rg;
                 sss = mg.b;
+
+                half3 specColor;
+                half3 diffColor = albedo;
+
                 
-                return fixed4(metallicGloss.r, 0, 0, 1);
+                return fixed4(metallicGloss.g, 0, 0, 1);
             }
             ENDCG
         }
