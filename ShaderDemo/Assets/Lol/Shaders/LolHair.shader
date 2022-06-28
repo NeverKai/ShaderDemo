@@ -9,7 +9,7 @@
         
         _BumpScale ("BumpScale", Float) = 1
         _Color ("Color", Color) = (1,1,1,1)
-        _AmbientCol ("AmbientCol", Color) = (0.3669, 0.80336, 0.91509, 0.30 )
+        _AmbientCol ("AmbientCol", Color) = (0.3669, 0.80336, 0.91509, 0.30)
 
         _Metallic ("Metallic", Float) = 0
     }
@@ -58,7 +58,7 @@
             };
 
             sampler2D _MainTex, _OcclusionMap, _Matcap, _BumpTex;
-            float4 _MainTex_ST,_Color;
+            float4 _MainTex_ST,_Color, _AmbientCol;
 
             float _BumpScale, _Metallic;
 
@@ -79,13 +79,15 @@
                 
                 fixed3 albedo = (mainTex.rgb * 0.305 + 0.68) * mainTex.rgb + fixed3(0.0125229, 0.0125229, 0.0125229);
                 albedo = albedo * (1 - _Metallic) * 0.96;
+                fixed4 col = _AmbientCol * fixed4(albedo, 1);
                 
                 fixed4 col1 = tex2D(_OcclusionMap, i.uv);
 
                 fixed4 normalTex = tex2D(_BumpTex, i.uv);
                 half3 worldNormal = normalize(UnpackScaleNormal(normalTex, _BumpScale));
                 
-                return fixed4(albedo, 1);
+                return fixed4(col);
+                // return fixed4(albedo, 1);
             }
             ENDCG
         }
