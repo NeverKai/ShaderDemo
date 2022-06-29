@@ -1,0 +1,215 @@
+#version 430
+
+layout(location=0) in vec4 TEXCOORD0;
+layout(location=1) in vec4 TEXCOORD1;
+layout(location=2) in vec4 TEXCOORD2;
+layout(location=3) in vec4 TEXCOORD3;
+layout(location=4) in vec4 TEXCOORD4;
+layout(location=5) in vec4 TEXCOORD5;
+
+smooth out vec4 v_TEXCOORD5In;
+smooth out vec4 v_TEXCOORD0In;
+smooth out vec4 v_TEXCOORD1In;
+smooth out vec4 v_TEXCOORD2In;
+smooth out vec4 v_TEXCOORD3In;
+smooth out vec4 v_TEXCOORD4In;
+
+layout(binding=0) uniform $Globals
+{
+vec3 __WorldSpaceCameraPos;
+vec4 __ProjectionParams;
+vec4 _hlslcc_mtx4x4unity_ObjectToWorld[4];
+vec4 _hlslcc_mtx4x4unity_WorldToObject[4];
+vec4 _unity_WorldTransformParams;
+vec4 _hlslcc_mtx4x4unity_MatrixVP[4];
+};
+
+
+void main()
+{
+vec4 i_REGISTER0;
+vec4 i_REGISTER1;
+vec4 i_REGISTER2;
+vec4 i_REGISTER3;
+vec4 i_REGISTER4;
+vec4 i_REGISTER5;
+i_REGISTER0.xyzw = TEXCOORD0.xyzw;
+i_REGISTER1.xy = TEXCOORD1.xy;
+i_REGISTER2.xy = TEXCOORD2.xy;
+i_REGISTER3.xyz = TEXCOORD3.xyz;
+i_REGISTER4.xyzw = TEXCOORD4.xyzw;
+i_REGISTER5.xyzw = TEXCOORD5.xyzw;
+
+vec4 o_REGISTER0;
+vec4 o_REGISTER1;
+vec4 o_REGISTER2;
+vec4 o_REGISTER3;
+vec4 o_REGISTER4;
+vec4 o_REGISTER5;
+vec4 o_REGISTER6;
+
+vec4 tf0;
+ivec4 ti0;
+vec4 tf1;
+ivec4 ti1;
+vec4 tf2;
+ivec4 ti2;
+vec4 tf3;
+ivec4 ti3;
+vec4 tf4;
+ivec4 ti4;
+vec4 tf5;
+ivec4 ti5;
+vec4 tf6;
+ivec4 ti6;
+vec4 tf7;
+ivec4 ti7;
+ivec4 iTempX[2];
+uvec4 uTempX[2];
+
+tf0.xyzw = vec4(i_REGISTER0.xyzw).xyzw; position
+tf1.xyzw = vec4(i_REGISTER4.xyzw).xyzw; normal
+tf2.xyz = vec4(i_REGISTER3.xyzx).xyz;   tangent
+tf3.xyz = vec4(i_REGISTER5.xyzx).xyz;   color
+tf4.xy = vec4(i_REGISTER1.xyxx).xy;     uv
+tf4.zw = vec4(i_REGISTER2.xxxy).zw;     uv2
+
+tf0.xyzw = vec4(tf0.xyzw).xyzw;
+
+tf4.xy = vec4(tf4.xyxx).xy;
+tf4.zw = vec4(tf4.zzzw).zw;
+tf2.xyz = vec4(tf2.xyzx).xyz;
+tf1.xyzw = vec4(tf1.xyzw).xyzw; normal
+tf3.xyz = vec4(tf3.xyzx).xyz;
+
+// UnityObjectToClipPos
+tf5.xyzw = vec4(tf0.yyyy * _hlslcc_mtx4x4unity_ObjectToWorld[1].xyzw).xyzw;
+tf6.xyzw = vec4(tf0.xxxx * _hlslcc_mtx4x4unity_ObjectToWorld[0].xyzw).xyzw;
+tf5.xyzw = vec4(tf5.xyzw + tf6.xyzw).xyzw;
+tf6.xyzw = vec4(tf0.zzzz * _hlslcc_mtx4x4unity_ObjectToWorld[2].xyzw).xyzw;
+tf5.xyzw = vec4(tf5.xyzw + tf6.xyzw).xyzw;
+tf5.xyzw = vec4(tf5.xyzw + _hlslcc_mtx4x4unity_ObjectToWorld[3].xyzw).xyzw;
+tf6.xyzw = vec4(tf5.yyyy * _hlslcc_mtx4x4unity_MatrixVP[1].xyzw).xyzw;
+tf7.xyzw = vec4(tf5.xxxx * _hlslcc_mtx4x4unity_MatrixVP[0].xyzw).xyzw;
+tf6.xyzw = vec4(tf6.xyzw + tf7.xyzw).xyzw;
+tf7.xyzw = vec4(tf5.zzzz * _hlslcc_mtx4x4unity_MatrixVP[2].xyzw).xyzw;
+tf6.xyzw = vec4(tf6.xyzw + tf7.xyzw).xyzw;
+tf5.xyzw = vec4(tf5.wwww * _hlslcc_mtx4x4unity_MatrixVP[3].xyzw).xyzw;
+tf5.xyzw = vec4(tf6.xyzw + tf5.xyzw).xyzw;
+
+
+// worldPos
+tf6.xyz = vec4(tf0.yyyy * _hlslcc_mtx4x4unity_ObjectToWorld[1].xyzx).xyz;
+tf7.xyz = vec4(tf0.xxxx * _hlslcc_mtx4x4unity_ObjectToWorld[0].xyzx).xyz;
+tf6.xyz = vec4(tf6.xyzx + tf7.xyzx).xyz;
+tf0.xyz = vec4(tf0.zzzz * _hlslcc_mtx4x4unity_ObjectToWorld[2].xyzx).xyz;
+tf0.xyz = vec4(tf6.xyzx + tf0.xyzx).xyz;
+tf6.xyz = vec4(tf0.wwww * _hlslcc_mtx4x4unity_ObjectToWorld[3].xyzx).xyz;
+tf0.xyw = vec4(tf0.xyxz + tf6.xyxz).xyw;
+
+// UnityWorldSpaceViewDir
+tf6.xyz = vec4(-tf0.xywx).xyz;
+tf6.xyz = vec4(tf6.xyzx + __WorldSpaceCameraPos.xyzx).xyz;
+
+tf3.xyz = vec4(tf3.xyzx * vec4(1.00000e-05, 1.00000e-05, 1.00000e-05, 0)).xyz;
+tf3.xyz = vec4(tf6.xyzx + tf3.xyzx).xyz;
+
+// 世界法线
+tf6.xyz = vec4(tf1.yyyy * _hlslcc_mtx4x4unity_ObjectToWorld[1].xyzx).xyz;
+tf7.xyz = vec4(tf1.xxxx * _hlslcc_mtx4x4unity_ObjectToWorld[0].xyzx).xyz;
+tf6.xyz = vec4(tf6.xyzx + tf7.xyzx).xyz;
+tf7.xyz = vec4(tf1.zzzz * _hlslcc_mtx4x4unity_ObjectToWorld[2].xyzx).xyz;
+tf6.xyz = vec4(tf6.xyzx + tf7.xyzx).xyz;
+
+// normalize世界法线
+tf2.w = vec4(dot(vec4(tf6.xyzx).xyz, vec4(tf6.xyzx).xyz)).w;
+tf7.xyz = vec4(inversesqrt(tf2.wwww)).xyz;
+tf7.xyz = vec4(tf7.xyzx).xyz;
+tf6.xyz = vec4(tf6.xyzx * tf7.xyzx).xyz;
+
+
+tf6.w = vec4(tf0.x).w;
+tf7.xyz = vec4(tf1.yzxy * tf2.zxyz).xyz;
+tf1.xyz = vec4(tf1.zxyz * tf2.yzxy).xyz;
+tf7.xyz = vec4(-tf7.xyzx).xyz;
+tf1.xyz = vec4(tf1.xyzx + tf7.xyzx).xyz;
+tf1.xyz = vec4(tf1.wwww * tf1.xyzx).xyz;
+tf7.xyz = vec4(tf1.yyyy * _hlslcc_mtx4x4unity_ObjectToWorld[1].xyzx).xyz;
+tf1.xyw = vec4(tf1.xxxx * _hlslcc_mtx4x4unity_ObjectToWorld[0].xyxz).xyw;
+tf1.xyw = vec4(tf7.xyxz + tf1.xyxw).xyw;
+tf7.xyz = vec4(tf1.zzzz * _hlslcc_mtx4x4unity_ObjectToWorld[2].xyzx).xyz;
+tf1.xyz = vec4(tf1.xywx + tf7.xyzx).xyz;
+tf1.w = vec4(dot(vec4(tf1.xyzx).xyz, vec4(tf1.xyzx).xyz)).w;
+tf1.w = vec4(inversesqrt(tf1.w)).w;
+tf1.xyz = vec4(tf1.xyzx * tf1.wwww).xyz;
+tf1.xyz = vec4(tf1.xyzx * _unity_WorldTransformParams.wwww).xyz;
+tf1.w = vec4(tf0.y).w;
+tf0.w = vec4(tf0.w).w;
+
+
+tf7.x = vec4(dot(vec4(tf2.xyzx).xyz, vec4(_hlslcc_mtx4x4unity_WorldToObject[0].xyzx).xyz)).x;
+tf7.y = vec4(dot(vec4(tf2.xyzx).xyz, vec4(_hlslcc_mtx4x4unity_WorldToObject[1].xyzx).xyz)).y;
+tf7.z = vec4(dot(vec4(tf2.xyzx).xyz, vec4(_hlslcc_mtx4x4unity_WorldToObject[2].xyzx).xyz)).z;
+
+tf2.x = vec4(dot(vec4(tf7.xyzx).xyz, vec4(tf7.xyzx).xyz)).x;
+tf2.xyz = vec4(inversesqrt(tf2.xxxx)).xyz;
+tf2.xyz = vec4(tf2.xyzx).xyz;
+
+tf0.xyz = vec4(tf7.xyzx * tf2.xyzx).xyz;
+tf5.xyzw = vec4(tf5.xyzw).xyzw;
+tf2.x = vec4(tf5.x).x;
+tf2.y = vec4(-tf5.y).y;
+tf3.w = vec4(tf5.w + tf5.z).w;
+tf2.z = vec4(tf3.w * 0.500000).z;
+tf2.w = vec4(tf5.w).w;
+
+tf4.xyzw = vec4(tf4.xyzw).xyzw;  // uv,uv2
+
+
+o_REGISTER0.xyzw = vec4(tf2.xyzw).xyzw;
+o_REGISTER1.xyzw = vec4(tf5.xyzw).xyzw;
+o_REGISTER2.xyzw = vec4(tf4.xyzw).xyzw; // worldNormal
+o_REGISTER3.xyzw = vec4(tf6.xyzw).xyzw;
+o_REGISTER4.xyzw = vec4(tf1.xyzw).xyzw;
+o_REGISTER5.xyzw = vec4(tf0.xyzw).xyzw;
+o_REGISTER6.xyz = vec4(tf3.xyzx).xyz;
+
+
+gl_Position.xyzw = o_REGISTER0.xyzw;
+v_TEXCOORD5In.xyzw = o_REGISTER1.xyzw;
+v_TEXCOORD0In.xyzw = o_REGISTER2.xyzw;  // uv,uv2
+v_TEXCOORD1In.xyzw = o_REGISTER3.xyzw;  // worldNormal
+v_TEXCOORD2In.xyzw = o_REGISTER4.xyzw;
+v_TEXCOORD3In.xyzw = o_REGISTER5.xyzw;
+v_TEXCOORD4In.xyz = o_REGISTER6.xyz;    // UnityWorldSpaceViewDir
+return;
+
+}
+
+Input:
+        TEXCOORD0
+        TEXCOORD1
+        TEXCOORD2
+        TEXCOORD3
+        TEXCOORD4
+        TEXCOORD5
+
+Output:
+        SV_Position0
+        TEXCOORD5
+        TEXCOORD0
+        TEXCOORD1
+        TEXCOORD2
+        TEXCOORD3
+        TEXCOORD4
+
+CBuffer 0:
+        __WorldSpaceCameraPos USED
+        __ProjectionParams UNUSED
+        _hlslcc_mtx4x4unity_ObjectToWorld USED
+        _hlslcc_mtx4x4unity_WorldToObject USED
+        _unity_WorldTransformParams USED
+        _hlslcc_mtx4x4unity_MatrixVP USED
+
+Resource:
+        $Globals : 0 USED
