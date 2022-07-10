@@ -68,8 +68,8 @@ ivec4 iTempX[2];
 uvec4 uTempX[2];
 
 tf0.xyzw = vec4(i_REGISTER0.xyzw).xyzw; position
-tf1.xyzw = vec4(i_REGISTER4.xyzw).xyzw; normal
-tf2.xyz = vec4(i_REGISTER3.xyzx).xyz;   tangent
+tf1.xyzw = vec4(i_REGISTER4.xyzw).xyzw; tangent
+tf2.xyz = vec4(i_REGISTER3.xyzx).xyz;   normal
 tf3.xyz = vec4(i_REGISTER5.xyzx).xyz;   color
 tf4.xy = vec4(i_REGISTER1.xyxx).xy;     uv
 tf4.zw = vec4(i_REGISTER2.xxxy).zw;     uv2
@@ -114,14 +114,14 @@ tf6.xyz = vec4(tf6.xyzx + __WorldSpaceCameraPos.xyzx).xyz;
 tf3.xyz = vec4(tf3.xyzx * vec4(1.00000e-05, 1.00000e-05, 1.00000e-05, 0)).xyz;
 tf3.xyz = vec4(tf6.xyzx + tf3.xyzx).xyz;
 
-// 世界法线
+// 世界切线
 tf6.xyz = vec4(tf1.yyyy * _hlslcc_mtx4x4unity_ObjectToWorld[1].xyzx).xyz;
 tf7.xyz = vec4(tf1.xxxx * _hlslcc_mtx4x4unity_ObjectToWorld[0].xyzx).xyz;
 tf6.xyz = vec4(tf6.xyzx + tf7.xyzx).xyz;
 tf7.xyz = vec4(tf1.zzzz * _hlslcc_mtx4x4unity_ObjectToWorld[2].xyzx).xyz;
 tf6.xyz = vec4(tf6.xyzx + tf7.xyzx).xyz;
 
-// normalize世界法线
+// normalize世界切线
 tf2.w = vec4(dot(vec4(tf6.xyzx).xyz, vec4(tf6.xyzx).xyz)).w;
 tf7.xyz = vec4(inversesqrt(tf2.wwww)).xyz;
 tf7.xyz = vec4(tf7.xyzx).xyz;
@@ -167,20 +167,20 @@ tf4.xyzw = vec4(tf4.xyzw).xyzw;  // uv,uv2
 
 
 o_REGISTER0.xyzw = vec4(tf2.xyzw).xyzw;
-o_REGISTER1.xyzw = vec4(tf5.xyzw).xyzw;
-o_REGISTER2.xyzw = vec4(tf4.xyzw).xyzw; // worldNormal
-o_REGISTER3.xyzw = vec4(tf6.xyzw).xyzw;
+o_REGISTER1.xyzw = vec4(tf5.xyzw).xyzw; // clipPos
+o_REGISTER2.xyzw = vec4(tf4.xyzw).xyzw; // uv
+o_REGISTER3.xyzw = vec4(tf6.xyzw).xyzw; // 世界切线
 o_REGISTER4.xyzw = vec4(tf1.xyzw).xyzw;
 o_REGISTER5.xyzw = vec4(tf0.xyzw).xyzw;
 o_REGISTER6.xyz = vec4(tf3.xyzx).xyz;
 
 
 gl_Position.xyzw = o_REGISTER0.xyzw;
-v_TEXCOORD5In.xyzw = o_REGISTER1.xyzw;
+v_TEXCOORD5In.xyzw = o_REGISTER1.xyzw;  // clipPos
 v_TEXCOORD0In.xyzw = o_REGISTER2.xyzw;  // uv,uv2
-v_TEXCOORD1In.xyzw = o_REGISTER3.xyzw;  // worldNormal
+v_TEXCOORD1In.xyzw = o_REGISTER3.xyzw;  // 世界切线
 v_TEXCOORD2In.xyzw = o_REGISTER4.xyzw;
-v_TEXCOORD3In.xyzw = o_REGISTER5.xyzw;
+v_TEXCOORD3In.xyzw = o_REGISTER5.xyzw;  // worldPos
 v_TEXCOORD4In.xyz = o_REGISTER6.xyz;    // UnityWorldSpaceViewDir
 return;
 
