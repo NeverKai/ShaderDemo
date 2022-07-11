@@ -109,7 +109,6 @@ tf0.z = vec4(dot(vec4(tf2.xyzx).xyz, vec4(tf2.xyzx).xyz)).z;
 tf0.z = vec4(max(vec4(tf0.z), vec4(0.00100000))).z;
 tf4.xyz = vec4(inversesqrt(tf0.zzzz)).xyz;
 tf4.xyz = vec4(tf4.xyzx).xyz;
-tf4.xyz = vec4(tf4.xyzx).xyz;
 tf2.xyz = vec4(tf2.xyzx * tf4.xyzx).xyz;
 
 
@@ -128,21 +127,22 @@ tf1.x = vec4(tf1.x * tf1.x).x;
 tf1.x = vec4(max(vec4(tf1.x), vec4(0.100000))).x;
 tf1.yzw = vec4(tf0.wwww * __LightColor0.xxyz).yzw;
 tf0.z = vec4(tf0.z * tf0.z).z;
+
+
 tf2.xy = vec4(tf0.xyxx * __MainTex_ST.xyxx).xy;
 tf2.xy = vec4(tf2.xyxx + __MainTex_ST.zwzz).xy;
 tf2.zw = vec4(-tf0.xxxy).zw;
 tf2.zw = vec4(tf2.zzzw + tf2.xxxy).zw;
 tf2.xy = vec4(tf2.xyxx).xy;
 
+tf2.xy = vec4(__MGSyncMotion).xy;
+tf2.xy = vec4(tf2.zwzz * tf2.xyxx).xy;
+
+tf0.xy = vec4(tf0.xyxx + tf2.xyxx).xy;
+
 
 tf3.xyzw = vec4(texture(textures2D[1]_samplers2D[1], vec4(tf2.xyxx).xy).xyzw).xyzw;
-tf3.xyzw = vec4(tf3.xyzw).xyzw;
 tf3.xyzw = vec4(tf3.xyzw * __Color.xyzw).xyzw;
-tf2.xy = vec4(__MGSyncMotion).xy;
-tf2.xy = vec4(tf2.xyxx).xy;
-tf2.xy = vec4(tf2.zwzz * tf2.xyxx).xy;
-tf0.xy = vec4(tf0.xyxx + tf2.xyxx).xy;
-tf0.xy = vec4(tf0.xyxx).xy;
 
 
 tf0.xy = vec4(texture(textures2D[2]_samplers2D[2], vec4(tf0.xyxx).xy).xyzw).xy;
@@ -152,6 +152,7 @@ tf0.y = vec4(-tf0.y).y;
 tf0.y = vec4(tf0.y * __GlossMapScale).y;
 tf0.y = vec4(tf0.y + 1.00000).y;
 tf0.y = vec4(tf0.y * tf0.y).y;
+
 tf2.y = vec4(max(vec4(tf0.y), vec4(0.00100000))).y;
 tf0.y = vec4(tf2.y * tf2.y).y;
 tf0.y = vec4(tf0.y + -1.00000).y;
@@ -163,6 +164,8 @@ tf0.y = vec4(tf0.y * tf1.x).y;
 tf0.y = vec4(tf0.y * tf0.z).y;
 tf0.y = vec4(tf0.y * 4.00000).y;
 tf0.y = vec4(tf0.w / tf0.y).y;
+
+
 tf2.xyz = vec4(tf3.xyzx * vec4(0.305306, 0.305306, 0.305306, 0)).xyz;
 tf2.xyz = vec4(tf2.xyzx + vec4(0.682171, 0.682171, 0.682171, 0)).xyz;
 tf2.xyz = vec4(tf2.xyzx * tf3.xyzx).xyz;
