@@ -159,6 +159,7 @@ tf3.xyz = vec4(tf6.xyzx + tf3.xyzx).xyz;
 tf0.z = vec4(dot(vec4(tf1.xyzx).xyz, vec4(tf5.xyzx).xyz)).z;
 tf0.z = vec4(max(vec4(tf0.z), vec4(0))).z;
 tf1.xyz = vec4(min(vec4(tf0.zzzz), vec4(vec4(1.00000, 1.00000, 1.00000, 0)))).xyz;
+
 tf1.xyz = vec4(tf1.xyzx * __LightColor0.xyzx).xyz;
 
 
@@ -175,17 +176,18 @@ tf1.w = vec4(tf0.z * tf1.w).w;
 tf1.w = vec4(tf1.w + 1.00000).w;
 tf0.z = vec4(tf0.z + 1.00000).z;
 
-
 tf0.z = vec4(max(vec4(tf0.z), vec4(0))).z;
 tf0.z = vec4(min(vec4(tf0.z), vec4(1.00000))).z;
 tf1.w = vec4(sqrt(tf1.w)).w;
 tf1.w = vec4(log2(tf1.w)).w;
 
+
+
 tf1.w = vec4(tf1.w * __PrimarySpecularExponent).w;
 tf1.w = vec4(exp2(tf1.w)).w;
+
 tf2.x = vec4(tf0.z * -2.00000).x;
 tf2.x = vec4(tf2.x + 3.00000).x;
-
 tf0.z = vec4(tf0.z * tf0.z).z;
 tf0.z = vec4(tf2.x * tf0.z).z;
 tf0.z = vec4(tf0.z * tf1.w).z;
@@ -243,8 +245,6 @@ tf3.xyz = vec4(tf0.xyzx * tf3.xyzx).xyz;
 (1 - __Metallic) * 0.96
 
 tf5.xyz = vec4(tf4.zzzz).xyz;
-tf5.xyz = vec4(tf5.xyzx).xyz;
-
 tf5.xyz = vec4(tf3.xyzx * tf5.xyzx).xyz;
 
 

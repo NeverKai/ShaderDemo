@@ -69,10 +69,8 @@ tf5.xyz = vec4(tf5.xyzx).xyz;
 
 tf5.xyz = vec4(tf5.xyzx * vec4(2.00000, 2.00000, 2.00000, 0)).xyz;
 tf5.xyz = vec4(tf5.xyzx + vec4(-1.00000, -1.00000, -1.00000, 0)).xyz;
-
 tf6.x = vec4(__BumpScale).x;
 tf6.y = vec4(__BumpScale).y;
-tf6.xy = vec4(tf6.xyxx).xy;
 tf0.zw = vec4(tf5.xxxy * tf6.xxxy).zw;
 
 tf2.xyz = vec4(tf2.xyzx * tf0.wwww).xyz;
@@ -81,10 +79,11 @@ tf1.xyz = vec4(tf0.zzzz * tf1.xyzx).xyz;
 tf1.xyz = vec4(tf2.xyzx + tf1.xyzx).xyz;
 tf2.xyz = vec4(tf3.xyzx * tf5.zzzz).xyz;
 tf1.xyz = vec4(tf1.xyzx + tf2.xyzx).xyz;
+
 tf0.z = vec4(dot(vec4(tf1.xyzx).xyz, vec4(tf1.xyzx).xyz)).z;
 tf2.xyz = vec4(inversesqrt(tf0.zzzz)).xyz;
 tf2.xyz = vec4(tf2.xyzx).xyz;
-tf2.xyz = vec4(tf2.xyzx).xyz;
+
 tf1.xyz = vec4(tf1.xyzx * tf2.xyzx).xyz;
 tf0.z = vec4(dot(vec4(tf4.xyzx).xyz, vec4(tf4.xyzx).xyz)).z;
 tf2.xyz = vec4(inversesqrt(tf0.zzzz)).xyz;
@@ -94,19 +93,26 @@ tf0.z = vec4(dot(vec4(__WorldSpaceLightPos0.xyzx).xyz, vec4(__WorldSpaceLightPos
 tf0.z = vec4(max(vec4(tf0.z), vec4(0.00100000))).z;
 tf0.z = vec4(inversesqrt(tf0.z)).z;
 tf3.xyz = vec4(tf0.zzzz * __WorldSpaceLightPos0.xyzx).xyz;
-tf2.xyz = vec4(tf2.xyzx).xyz;
+
+
 tf2.xyz = vec4(tf2.xyzx).xyz;
 tf2.xyz = vec4(tf2.xyzx * tf4.xyzx).xyz;
 tf2.xyz = vec4(tf3.xyzx + tf2.xyzx).xyz;
+
 tf0.z = vec4(dot(vec4(tf2.xyzx).xyz, vec4(tf2.xyzx).xyz)).z;
 tf0.z = vec4(max(vec4(tf0.z), vec4(0.00100000))).z;
 tf4.xyz = vec4(inversesqrt(tf0.zzzz)).xyz;
 tf4.xyz = vec4(tf4.xyzx).xyz;
-tf4.xyz = vec4(tf4.xyzx).xyz;
+
+
 tf2.xyz = vec4(tf2.xyzx * tf4.xyzx).xyz;
+
+
 tf0.z = vec4(dot(vec4(tf1.xyzx).xyz, vec4(tf2.xyzx).xyz)).z;
 tf0.z = vec4(max(vec4(tf0.z), vec4(0))).z;
 tf0.z = vec4(min(vec4(tf0.z), vec4(1.00000))).z;
+
+
 tf0.w = vec4(dot(vec4(tf1.xyzx).xyz, vec4(tf3.xyzx).xyz)).w;
 tf0.w = vec4(max(vec4(tf0.w), vec4(0))).w;
 tf0.w = vec4(min(vec4(tf0.w), vec4(1.00000))).w;
@@ -137,11 +143,11 @@ tf0.xy = vec4(tf0.xyxx).xy;
 /// Occlutionmap uv
 tf0.xy = vec4(texture(textures2D[2]_samplers2D[2], vec4(tf0.xyxx).xy).xyzw).xy;
 tf0.xy = vec4(tf0.xyxx).xy;
-tf0.xy = vec4(tf0.xyxx).xy;
 
-tf0.y = vec4(-tf0.y).y;
-tf0.y = vec4(tf0.y * __GlossMapScale).y;
-tf0.y = vec4(tf0.y + 1.00000).y;
+1 - __GlossMapScale * tf0.y
+// tf0.y = vec4(-tf0.y).y;
+// tf0.y = vec4(tf0.y * __GlossMapScale).y;
+// tf0.y = vec4(tf0.y + 1.00000).y;
 tf0.y = vec4(tf0.y * tf0.y).y;
 tf2.y = vec4(max(vec4(tf0.y), vec4(0.00100000))).y;
 tf0.y = vec4(tf2.y * tf2.y).y;
@@ -189,6 +195,9 @@ tf0.xyz = vec4(tf0.xyzx + vec4(-0.0550000, -0.0550000, -0.0550000, 0)).xyz;
 tf3.xyz = vec4(max(vec4(tf0.xyzx), vec4(vec4(0, 0, 0, 0)))).xyz;
 tf3.xyz = vec4(tf3.xyzx).xyz;
 tf3.w = vec4(tf3.w).w;
+
+
+
 tf3.xyzw = vec4(tf3.xyzw).xyzw;
 tf3.xyzw = vec4(tf3.xyzw).xyzw;
 o_REGISTER0.xyzw = vec4(tf3.xyzw).xyzw;
